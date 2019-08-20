@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TabItemView">
+        <attr name="selectedImgResId" format="reference"/>
+        <attr name="unselectedImgResId" format="reference"/>
+        <attr name="selectedTextColor" format="color|reference"/>
+        <attr name="unselectedTextColor" format="color|reference"/>
+        <attr name="tabItemWidth" format="dimension|reference"/>
+        <attr name="tabItemHeight" format="dimension|reference"/>
+        <attr name="imgWidth" format="dimension|reference"/>
+        <attr name="imgHeight" format="dimension|reference"/>
+        <attr name="textSize" format="dimension|reference"/>
+        <attr name="defaultSelected" format="boolean"/>
+        <attr name="tabName" format="string"/>
+        <attr name="tabIndex" format="integer"/>
+    </declare-styleable>
+
+</resources>

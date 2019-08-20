@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:background="#99cccccc"
+        android:visibility="visible" />
+
+    <!-- 底部导航栏 -->
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <com.android.jesse.huitao.view.custom.TabItemView
+            android:id="@+id/recommend_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:selectedImgResId="@mipmap/ic_recommend_selected"
+            app:unselectedImgResId="@mipmap/ic_recommend_unselected"
+            app:selectedTextColor="@color/color_selected_tags"
+            app:unselectedTextColor="@color/color_maintext_title"
+            app:imgWidth="24dp"
+            app:imgHeight="24dp"
+            app:tabName="推荐"
+            app:tabIndex="0"
+            />
+
+        <com.android.jesse.huitao.view.custom.TabItemView
+            android:id="@+id/search_tab"
+            android:layout_width="0dp"
+            android:layout_height="69dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/transparent"
+            app:selectedImgResId="@mipmap/ic_logo"
+            app:unselectedImgResId="@mipmap/ic_logo"
+            app:selectedTextColor="@color/color_maintext_title"
+            app:unselectedTextColor="@color/color_maintext_title"
+            app:imgWidth="39dp"
+            app:imgHeight="39dp"
+            app:tabName="查券"
+            app:tabIndex="1"
+            app:defaultSelected="true"
+            />
+
+        <com.android.jesse.huitao.view.custom.TabItemView
+            android:id="@+id/aboutus_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:selectedImgResId="@mipmap/ic_logo"
+            app:unselectedImgResId="@mipmap/ic_logo"
+            app:selectedTextColor="@color/color_selected_tags"
+            app:unselectedTextColor="@color/color_maintext_title"
+            app:imgWidth="24dp"
+            app:imgHeight="24dp"
+            app:tabName="关于我们"
+            app:tabIndex="2"
+            />
+    </LinearLayout>
+
+</LinearLayout>
