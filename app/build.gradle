@@ -7,19 +7,55 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
+        debug {
+            keyAlias 'jesseandroid'
+            keyPassword 'jesse0225.'
+            storeFile file('D:/zhangshihao/development/keystore/huitao.jks')
+            storePassword 'jesse0225.'
+        }
+
         release {
-            minifyEnabled false
+            keyAlias 'jesseandroid'
+            keyPassword 'jesse0225.'
+            storeFile file('D:/zhangshihao/development/keystore/huitao.jks')
+            storePassword 'jesse0225.'
+        }
+    }
+
+    buildTypes {
+        debug{
+
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 自定义输出配置
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    def fileName
+                    def date = new Date()
+                    def formattedDate = date.format('yyyyMMdd')
+                    if (variant.buildType.name.equals('release')) {
+                        fileName = "惠省淘.apk"
+                    } else if (variant.buildType.name.equals('debug')) {
+                        fileName = "惠省淘_${variant.mergedFlavor.versionName}_${formattedDate}_D.apk"
+                    }
+                    outputFileName = fileName;
+                }
+            }
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
@@ -33,4 +69,10 @@ dependencies {
     implementation 'com.blankj:utilcode:1.23.7'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'net.grandcentrix.tray:tray:0.12.0'
+    implementation files('libs/taobao-sdk-java-auto_1468685308771-20190822.jar')
+    implementation files('libs/taobao-sdk-java-auto_1468685308771-20190822-source.jar')
+    //okGo网络请求框架
+    implementation 'com.lzy.net:okgo:3.0.4'
+    compile 'com.lzy.net:okrx2:2.0.2'
+    compile 'com.lzy.net:okserver:2.0.5'
 }

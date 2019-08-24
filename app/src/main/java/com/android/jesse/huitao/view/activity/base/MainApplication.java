@@ -18,6 +18,10 @@ public class MainApplication extends Application {
     public static Context mContext;
     public static MainApplication app;
 
+    public static synchronized MainApplication getInstance() {
+        return app;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

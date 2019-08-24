@@ -48,7 +48,6 @@
             android:textColorHint="@color/color_most_shallow"
             android:textSize="@dimen/sp_14"
             android:paddingEnd="@dimen/dp_10"
-            android:maxLength="10"
             />
     </RelativeLayout>
 

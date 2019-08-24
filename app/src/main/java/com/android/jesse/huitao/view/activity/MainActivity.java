@@ -20,5 +20,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initEventAndData() {
         startActivity(new Intent(mContext,HomePageActivity.class));
+        finish();
     }
 }

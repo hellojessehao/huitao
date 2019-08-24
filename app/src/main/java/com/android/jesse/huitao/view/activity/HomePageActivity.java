@@ -112,7 +112,7 @@ public class HomePageActivity extends BaseActivity {
      */
     private void resetSelectState() {
         for (int i = 0; i < tabList.size(); i++) {
-            if (i == currentSelectIndex || i == SEARCH_COUPONS_TAB_INDEX) {
+            if (i == currentSelectIndex) {
                 continue;
             }
             tabList.get(i).setSelect(false);

@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">惠淘</string>
+    <string name="app_name">惠省淘</string>
+    <!-- 网络框架 -->
+    <string name="no_open_network">网络未打开</string>
+    <string name="request_failed_server">服务器返回数据异常</string>
+    <string name="request_failed">网络请求发生异常</string>
 </resources>
