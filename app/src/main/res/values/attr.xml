@@ -16,4 +16,10 @@
         <attr name="tabIndex" format="integer"/>
     </declare-styleable>
 
+    <!-- ImageViewRoundRect -->
+    <declare-styleable name="ImageViewRoundRect">
+        <attr name="roundRadius" format="integer"/>
+        <attr name="type" format="integer"/>
+    </declare-styleable>
+
 </resources>

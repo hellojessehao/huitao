@@ -1,13 +1,26 @@
 package com.android.jesse.huitao.utils;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+
 import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.model.bean.BaseResponseBean;
+import com.android.jesse.huitao.model.bean.GoodsListBean;
+import com.android.jesse.huitao.model.bean.ParameterizedTypeImpl;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.GeneralSecurityException;
@@ -26,12 +39,14 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Created by Colin on 2017/3/8 16:40.
- * 邮箱：cartier_he@163.com
- * 微信：cartier_he
+ * @Description: 接口访问工具类 - 接口请求用这个
+ * @author: zhangshihao
+ * @date: 2019/8/19
  */
 
 public class HttpUtils {
+
+    private static final String TAG = HttpUtils.class.getSimpleName();
 
     public static final String SIGN_METHOD_MD5 = "md5";
     public static final String SIGN_METHOD_HMAC = "hmac";
@@ -42,11 +57,53 @@ public class HttpUtils {
     public static final String serverUrl = Constant.BASE_URL_TAOBAO;
     public static final String appKey = Constant.APPKEY_TAOBAO; // 可替换为您的沙箱环境应用的appKey
     public static final String appSecret = Constant.APPSECRET_TAOBAO; // 可替换为您的沙箱环境应用的appSecret
+    public static final String ADZONE_ID_FOR_THISAPP = "109339400190";//此APP对应的广告位ID
 
-//    public static void main(String[] args) throws Exception {
-//        System.out.println(getSellerItem());
-//    }
+    /**
+     * 获取商品列表
+     */
+    public static String getGoodsList(int page_no,int page_size,int material_id) throws IOException{
+        Map<String, String> params = new HashMap<String, String>();
+        // 公共参数
+        params.put("method", Constant.GOODS_LIST_GET);
+        params.put("app_key", appKey);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        params.put("timestamp", df.format(new Date()));
+        params.put("format", "json");
+        params.put("v", "2.0");
+        params.put("sign_method", "hmac");
+        // 业务参数
+        params.put("adzone_id",Constant.ADZONE_ID);
+        params.put("page_no",page_no+"");
+        params.put("page_size",page_size+"");
+        params.put("material_id",material_id+"");
+        // 签名参数
+        params.put("sign", signTopRequest(params, appSecret, SIGN_METHOD_HMAC));
+        // 请用API
+        return callApi(new URL(serverUrl), params);
+    }
 
+    public static Map<String,String> createParamsMap(String method,Map<String,String> bussinessMap) throws IOException{
+        Map<String, String> params = new HashMap<String, String>();
+        // 公共参数
+        params.put("method", method);
+        params.put("app_key", appKey);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        params.put("timestamp", df.format(new Date()));
+        params.put("format", "json");
+        params.put("v", "2.0");
+        params.put("sign_method", "hmac");
+        // 业务参数
+        params.putAll(bussinessMap);
+        // 签名参数
+        params.put("sign", signTopRequest(params, appSecret, SIGN_METHOD_HMAC));
+        return params;
+    }
+
+    /**
+     * 获取阿里妈妈优惠券信息
+     * @throws IOException
+     */
     public static String getCouponInfo() throws IOException {
         Map<String, String> params = new HashMap<String, String>();
         // 公共参数
@@ -59,6 +116,28 @@ public class HttpUtils {
         params.put("sign_method", "hmac");
         // 业务参数
         params.put("me","nfr%2BYTo2k1PX18gaNN%2BIPkIG2PadNYbBnwEsv6mRavWieOoOE3L9OdmbDSSyHbGxBAXjHpLKvZbL1320ML%2BCF5FRtW7N7yJ056Lgym4X01A%3D");
+        // 签名参数
+        params.put("sign", signTopRequest(params, appSecret, SIGN_METHOD_HMAC));
+        // 请用API
+        return callApi(new URL(serverUrl), params);
+    }
+
+    /**
+     * 将输入的淘口令转化成自己的淘口令
+     */
+    public static String convertTkl(String password_content) throws IOException{
+        Map<String, String> params = new HashMap<String, String>();
+        // 公共参数
+        params.put("method", Constant.TKL_CONVERT);
+        params.put("app_key", appKey);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        params.put("timestamp", df.format(new Date()));
+        params.put("format", "json");
+        params.put("v", "2.0");
+        params.put("sign_method", "hmac");
+        // 业务参数
+        params.put("password_content",password_content);
+        params.put("adzone_id",ADZONE_ID_FOR_THISAPP);
         // 签名参数
         params.put("sign", signTopRequest(params, appSecret, SIGN_METHOD_HMAC));
         // 请用API

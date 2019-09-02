@@ -29,7 +29,7 @@ public class MainApplication extends Application {
         app = this;
         //初始化sp
         SharedPreferencesUtil.initSharedPreferences(mContext);
-        //初始化崩溃监听器，崩溃日志将存于 mnt/sdcard/crash 目录下
+        //初始化崩溃监听器，崩溃日志将存于 mnt/sdcard/tbcrash 目录下
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
     }
