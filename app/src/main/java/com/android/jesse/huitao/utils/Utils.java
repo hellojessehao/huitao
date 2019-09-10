@@ -11,6 +11,7 @@ import com.taobao.api.internal.util.StringUtils;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -208,6 +209,71 @@ public class Utils {
                 .append(dataBean.getCoupon_amount())
                 .append(")");
         return stringBuilder.toString();
+    }
+
+    /**
+     * 拿出列表的前8个item放在另外一个列表里
+     */
+    public static List<String> getEightItems(List<String> oriList){
+        List<String> resultList = new ArrayList<>();
+        if(oriList.size() > 8){
+            for(int i=0;i<8;i++){
+                resultList.add(oriList.get(i));
+            }
+        }else{
+            return oriList;
+        }
+        return resultList;
+    }
+
+    /**
+     * 检查要加入列表的Item是否已经存在，如果存在则
+     * 将列表中当前已经存在的Item放到第一位
+     */
+    public static List<String> checkIsItemExist(List<String> oriList,String content){
+        int existPosition = -1;
+        for(int i=0;i<oriList.size();i++){
+            if(oriList.get(i).equals(content)){
+                existPosition = i;
+            }
+        }
+        if(existPosition > 0){
+            oriList.remove(existPosition);
+            oriList.add(0,content);
+            return oriList;
+        }else{
+            return null;//代表不存在一样的内容
+        }
+    }
+
+    public enum Conditions{
+        HOT,
+        SELL_UP,//销量升序 （从小到大）
+        SELL_DOWN,//销量升序 （从大到小）
+        PRICE_UP,//价格升序 （从小到大）
+        PRICE_DOWN//价格降序 （从大到小）
+    }
+
+    /**
+     * 排序_des（降序），排序_asc（升序），销量（total_sales），淘客佣金比率（tk_rate）， 累计推广量（tk_total_sales），总支出佣金（tk_total_commi），价格（price）
+     */
+    public static String getSort(Conditions condition){
+        String sort = "";
+        switch (condition){
+            case SELL_UP:
+                sort = "total_sales_asc";
+                break;
+            case SELL_DOWN:
+                sort = "total_sales_des";
+                break;
+            case PRICE_UP:
+                sort = "price_asc";
+                break;
+            case PRICE_DOWN:
+                sort = "price_des";
+                break;
+        }
+        return sort;
     }
 
 }

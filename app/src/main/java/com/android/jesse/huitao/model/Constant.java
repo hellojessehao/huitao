@@ -14,6 +14,8 @@ public class Constant {
     public static final String POPULARIZE_COUPONS_GET = "taobao.tbk.coupon.get";//推广券获取
     public static final String TKL_CONVERT = "taobao.tbk.tpwd.convert";//邀约制接口 暂无权限
     public static final String GOODS_LIST_GET = "taobao.tbk.dg.optimus.material";//获取商品列表
+    public static final String GOODS_SEARCH = "taobao.tbk.dg.material.optional";//根据关键词搜索商品
+    public static final String SHOP_SEARCH = "taobao.tbk.shop.get";//根据关键词搜索店铺
     //@}
 
     //@第三方平台参数{
@@ -72,8 +74,11 @@ public class Constant {
     //@}
     //网络@{
     public static final String URL_HEADER = "http:";
-    public static final String URL_SAFE_HEADER = "https:";
+    public static final String URL_SAFE_HEADER = "https:";//调用生成淘口令接口时，生成淘口令的链接头部需要使用https
     //@}
     public static final String HMAC = "hmac";
     public static final String MD5 = "md5";
+    //SPKEY@{
+    public static final String SPKEY_SEARCH_HISTORY = "spkey_search_history";
+    //@}
 }

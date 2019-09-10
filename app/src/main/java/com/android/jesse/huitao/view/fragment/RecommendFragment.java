@@ -2,6 +2,7 @@ package com.android.jesse.huitao.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 
@@ -23,6 +26,7 @@ import com.android.jesse.huitao.utils.HttpUtils;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
+import com.android.jesse.huitao.view.activity.SearchActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 import com.android.jesse.huitao.view.adapter.CommonFragmentAdapter;
 import com.google.gson.Gson;
@@ -41,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @Description: 推荐商品页面
@@ -162,6 +167,15 @@ public class RecommendFragment extends BaseFragment {
         }
     }
 
+    @OnClick({R.id.view_search})
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.view_search:
+                startActivity(new Intent(mContext,SearchActivity.class));
+                break;
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -173,4 +187,5 @@ public class RecommendFragment extends BaseFragment {
         super.onStop();
         mBanner.stopAutoPlay();
     }
+
 }

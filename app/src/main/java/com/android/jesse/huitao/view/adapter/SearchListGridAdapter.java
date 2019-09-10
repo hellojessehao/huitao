@@ -8,11 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,53 +19,71 @@ import android.widget.TextView;
 
 import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
-import com.android.jesse.huitao.model.bean.GoodsListBean;
+import com.android.jesse.huitao.model.bean.SearchListBean;
 import com.android.jesse.huitao.model.bean.TklBean;
 import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.GlideUtil;
+import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.RequestHelper;
 import com.android.jesse.huitao.utils.ToastUtil;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
- * @Description:
+ * @Description: 搜索列表GridView适配器
  * @author: zhangshihao
- * @date: 2019/9/2
+ * @date: 2019/9/9
  */
-public class TypesFragmentAdapter extends RecyclerView.Adapter<TypesFragmentAdapter.ViewHolder> {
+public class SearchListGridAdapter extends BaseAdapter {
 
-    private static final String TAG = TypesFragmentAdapter.class.getSimpleName();
+    private static final String TAG = SearchListGridAdapter.class.getSimpleName();
 
+    private List<SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean> dataBeanList;
     private Context mContext;
-    private List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> dataBeanList;
-
     private ClipboardManager clipboardManager;
     private Dialog useCouponDialog;
 
-    public TypesFragmentAdapter(List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> dataBeanList) {
+    public SearchListGridAdapter(Context mContext,List<SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean> dataBeanList) {
         this.dataBeanList = dataBeanList;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        mContext = viewGroup.getContext();
-        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.types_fragment_adapter, null, false));
+        this.mContext = mContext;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        final GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean dataBean = dataBeanList.get(position);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder = null;
+        if(convertView == null){
+            viewHolder = new ViewHolder();
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.search_list_grid_adapter,null,false);
+            viewHolder.iv_cover = convertView.findViewById(R.id.iv_cover);
+            viewHolder.tv_coupon_value = convertView.findViewById(R.id.tv_coupon_value);
+            viewHolder.tv_discount_price = convertView.findViewById(R.id.tv_discount_price);
+            viewHolder.tv_ori_price = convertView.findViewById(R.id.tv_ori_price);
+            viewHolder.tv_selled_count = convertView.findViewById(R.id.tv_selled_count);
+            viewHolder.tv_shop_name = convertView.findViewById(R.id.tv_shop_name);
+            viewHolder.tv_title = convertView.findViewById(R.id.tv_title);
+            viewHolder.ll_get_coupon = convertView.findViewById(R.id.ll_get_coupon);
+            viewHolder.rl_container = convertView.findViewById(R.id.rl_container);
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,SizeUtils.dp2px(280));
+        convertView.setLayoutParams(layoutParams);
+        final SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean dataBean = dataBeanList.get(position);
+        GlideUtil.getInstance().loadImg(mContext,dataBean.getPict_url(),viewHolder.iv_cover);
+        viewHolder.tv_title.setText(dataBean.getTitle());
+        viewHolder.tv_shop_name.setText(dataBean.getShop_title());
+        //制造中划线
+        viewHolder.tv_ori_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+        viewHolder.tv_ori_price.setText(dataBean.getCoupon_start_fee() + "");
+        viewHolder.tv_selled_count.setText(dataBean.getVolume() + "人已买");
+        viewHolder.tv_discount_price.setText("￥"+(Float.parseFloat(dataBean.getCoupon_start_fee()) - Float.parseFloat(dataBean.getCoupon_amount())));
+        viewHolder.tv_coupon_value.setText(dataBean.getCoupon_amount() + "元");
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO:跳转商品详情页面
@@ -129,45 +146,34 @@ public class TypesFragmentAdapter extends RecyclerView.Adapter<TypesFragmentAdap
                 }, TklBean.class);
             }
         });
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ScreenUtils.getScreenWidth(), SizeUtils.dp2px(130));
-        viewHolder.rl_container.setLayoutParams(layoutParams);
-        GlideUtil.getInstance().loadOriImg(mContext, Constant.URL_HEADER + dataBean.getPict_url(), viewHolder.iv_main_pic);
-        viewHolder.tv_title.setText(dataBean.getTitle());
-        viewHolder.tv_ori_price.setText(dataBean.getCoupon_start_fee() + "");
-        viewHolder.tv_selled_count.setText(dataBean.getVolume() + "件");
-        viewHolder.tv_discount_price.setText((Float.parseFloat(dataBean.getCoupon_start_fee()) - dataBean.getCoupon_amount()) + "");
-        viewHolder.tv_coupon_value.setText(dataBean.getCoupon_amount() + "元");
+        return convertView;
     }
 
     @Override
-    public int getItemCount() {
-        return dataBeanList == null ? 0 : dataBeanList.size();
+    public int getCount() {
+        return dataBeanList==null?0:dataBeanList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.rl_container)
-        RelativeLayout rl_container;
-        @BindView(R.id.iv_main_pic)
-        ImageView iv_main_pic;
-        @BindView(R.id.tv_title)
-        TextView tv_title;
-        @BindView(R.id.tv_ori_price)
-        TextView tv_ori_price;
-        @BindView(R.id.tv_selled_count)
-        TextView tv_selled_count;
-        @BindView(R.id.tv_discount_price)
-        TextView tv_discount_price;
-        @BindView(R.id.ll_get_coupon)
-        LinearLayout ll_get_coupon;
-        @BindView(R.id.tv_coupon_value)
-        TextView tv_coupon_value;
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            //制造中划线
-            tv_ori_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-        }
+    @Override
+    public Object getItem(int position) {
+        return dataBeanList!=null?dataBeanList.get(position):null;
+    }
+
+    class ViewHolder{
+        ImageView iv_cover;
+        TextView tv_title;
+        TextView tv_shop_name;
+        TextView tv_ori_price;
+        TextView tv_selled_count;
+        TextView tv_discount_price;
+        TextView tv_coupon_value;
+        LinearLayout ll_get_coupon;
+        RelativeLayout rl_container;
     }
 
 }

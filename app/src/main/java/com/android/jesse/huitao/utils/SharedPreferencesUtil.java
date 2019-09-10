@@ -2,11 +2,21 @@ package com.android.jesse.huitao.utils;
 
 import android.content.Context;
 
+import com.android.jesse.huitao.model.Constant;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import net.grandcentrix.tray.AppPreferences;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class SharedPreferencesUtil {
+
+	private static final String TAG = SharedPreferencesUtil.class.getSimpleName();
+
 	/**
 	 * 初始化一个叫vqs_shared_data的偏好设置
 	 */
@@ -92,4 +102,5 @@ public class SharedPreferencesUtil {
 	public static void setIsFirstDowns(String key, boolean value) {
 		appPreferences.put(key, value);
 	}
+
 }
