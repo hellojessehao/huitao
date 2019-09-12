@@ -26,6 +26,7 @@ import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.GlideUtil;
 import com.android.jesse.huitao.utils.RequestHelper;
 import com.android.jesse.huitao.utils.ToastUtil;
+import com.android.jesse.huitao.utils.Utils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 
@@ -135,7 +136,7 @@ public class TypesFragmentAdapter extends RecyclerView.Adapter<TypesFragmentAdap
         viewHolder.tv_title.setText(dataBean.getTitle());
         viewHolder.tv_ori_price.setText(dataBean.getCoupon_start_fee() + "");
         viewHolder.tv_selled_count.setText(dataBean.getVolume() + "件");
-        viewHolder.tv_discount_price.setText((Float.parseFloat(dataBean.getCoupon_start_fee()) - dataBean.getCoupon_amount()) + "");
+        viewHolder.tv_discount_price.setText(Utils.getDiscountPrice(dataBean.getCoupon_start_fee(),dataBean.getCoupon_amount()) + "");
         viewHolder.tv_coupon_value.setText(dataBean.getCoupon_amount() + "元");
     }
 

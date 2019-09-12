@@ -1,10 +1,16 @@
 package com.android.jesse.huitao.view.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.TabHost;
 
 import com.android.jesse.huitao.R;
+import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 import com.android.jesse.huitao.view.custom.TabItemView;
 import com.android.jesse.huitao.view.fragment.AboutUsFragment;
@@ -42,12 +48,17 @@ public class HomePageActivity extends BaseActivity {
     private RecommendFragment recommendFragment;
     private SearchCouponsFragment searchCouponsFragment;
     private AboutUsFragment aboutUsFragment;
+    private String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    private final int REQUEST_PERMISSIONS = 110;
 
     @Override
     protected int getLayout() {
         return R.layout.home_page_activity;
     }
 
+    @TargetApi(23)
     @Override
     protected void initEventAndData() {
         //初始化变量
@@ -65,6 +76,20 @@ public class HomePageActivity extends BaseActivity {
         recommend_tab.setOnClickListener(onTabClickListener);
         search_tab.setOnClickListener(onTabClickListener);
         aboutus_tab.setOnClickListener(onTabClickListener);
+        if(Utils.isHigherThanM()){
+            if(!checkPermissions()){
+                requestPermissions(permissions,REQUEST_PERMISSIONS);
+            }
+        }
+    }
+
+    private boolean checkPermissions(){
+        for(String permission : permissions){
+            if(ActivityCompat.checkSelfPermission(mContext,permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
     }
 
     public View.OnClickListener onTabClickListener = new View.OnClickListener() {
@@ -119,4 +144,16 @@ public class HomePageActivity extends BaseActivity {
         }
     }
 
+    @TargetApi(23)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_PERMISSIONS){
+            for(int i=0;i<permissions.length;i++){
+                if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(permissions,REQUEST_PERMISSIONS);
+                }
+            }
+        }
+    }
 }

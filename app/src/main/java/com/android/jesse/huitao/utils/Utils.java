@@ -1,5 +1,8 @@
 package com.android.jesse.huitao.utils;
 
+import android.os.Build;
+import android.text.TextUtils;
+
 import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.model.bean.GoodsListBean;
 import com.android.jesse.huitao.net.bean.NetRetBean;
@@ -274,6 +277,48 @@ public class Utils {
                 break;
         }
         return sort;
+    }
+
+    /**
+     * 获取折扣价
+     * @param startFee 优惠券起用价
+     * @param couponAmount 优惠券抵扣价
+     * @return 商品折扣价
+     */
+    public static float getDiscountPrice(String startFee,String couponAmount){
+        float fee = 0;
+        float amount = 0;
+        if(!TextUtils.isEmpty(startFee)){
+            fee = Float.parseFloat(startFee);
+        }
+        if(!TextUtils.isEmpty(couponAmount)){
+            amount = Float.parseFloat(couponAmount);
+        }
+        return fee-amount;
+    }
+
+    /**
+     * 获取折扣价
+     * @param startFee 优惠券起用价
+     * @param couponAmount 优惠券抵扣价
+     * @return 商品折扣价
+     */
+    public static float getDiscountPrice(String startFee,int couponAmount){
+        float fee = 0;
+        if(!TextUtils.isEmpty(startFee)){
+            fee = Float.parseFloat(startFee);
+        }
+        return fee-couponAmount;
+    }
+
+    /**
+     * 判断是否高于6.0版本
+     */
+    public static boolean isHigherThanM(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return true;
+        }
+        return false;
     }
 
 }

@@ -21,7 +21,7 @@ public class OffsetRecyclerDivider extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        outRect.set(left, 0, 0, bottom);
+        outRect.set(left, 0, left, bottom);
     }
 
     public int getBottom() {

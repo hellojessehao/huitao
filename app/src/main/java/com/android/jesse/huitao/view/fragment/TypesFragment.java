@@ -87,6 +87,7 @@ public class TypesFragment extends BaseFragment {
         bussinessMap.put("adzone_id",Constant.ADZONE_ID);
         bussinessMap.put("page_no",1+"");
         bussinessMap.put("page_size",100+"");
+        bussinessMap.put("platform",2+"");
 
         getData();
     }

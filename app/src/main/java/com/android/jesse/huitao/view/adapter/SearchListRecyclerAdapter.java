@@ -8,10 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,52 +27,43 @@ import com.android.jesse.huitao.utils.GlideUtil;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.RequestHelper;
 import com.android.jesse.huitao.utils.ToastUtil;
+import com.android.jesse.huitao.utils.Utils;
 import com.blankj.utilcode.util.SizeUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @Description: 搜索列表GridView适配器
  * @author: zhangshihao
  * @date: 2019/9/9
  */
-public class SearchListGridAdapter extends BaseAdapter {
+public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRecyclerAdapter.ViewHolder> {
 
-    private static final String TAG = SearchListGridAdapter.class.getSimpleName();
+    private static final String TAG = SearchListRecyclerAdapter.class.getSimpleName();
 
     private List<SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean> dataBeanList;
     private Context mContext;
     private ClipboardManager clipboardManager;
     private Dialog useCouponDialog;
 
-    public SearchListGridAdapter(Context mContext,List<SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean> dataBeanList) {
+    public SearchListRecyclerAdapter(Context mContext, List<SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean> dataBeanList) {
         this.dataBeanList = dataBeanList;
         this.mContext = mContext;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        if(convertView == null){
-            viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.search_list_grid_adapter,null,false);
-            viewHolder.iv_cover = convertView.findViewById(R.id.iv_cover);
-            viewHolder.tv_coupon_value = convertView.findViewById(R.id.tv_coupon_value);
-            viewHolder.tv_discount_price = convertView.findViewById(R.id.tv_discount_price);
-            viewHolder.tv_ori_price = convertView.findViewById(R.id.tv_ori_price);
-            viewHolder.tv_selled_count = convertView.findViewById(R.id.tv_selled_count);
-            viewHolder.tv_shop_name = convertView.findViewById(R.id.tv_shop_name);
-            viewHolder.tv_title = convertView.findViewById(R.id.tv_title);
-            viewHolder.ll_get_coupon = convertView.findViewById(R.id.ll_get_coupon);
-            viewHolder.rl_container = convertView.findViewById(R.id.rl_container);
-            convertView.setTag(viewHolder);
-        }else{
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,SizeUtils.dp2px(280));
-        convertView.setLayoutParams(layoutParams);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.search_list_grid_adapter,null,false));
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         final SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean dataBean = dataBeanList.get(position);
         GlideUtil.getInstance().loadImg(mContext,dataBean.getPict_url(),viewHolder.iv_cover);
         viewHolder.tv_title.setText(dataBean.getTitle());
@@ -80,7 +72,8 @@ public class SearchListGridAdapter extends BaseAdapter {
         viewHolder.tv_ori_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         viewHolder.tv_ori_price.setText(dataBean.getCoupon_start_fee() + "");
         viewHolder.tv_selled_count.setText(dataBean.getVolume() + "人已买");
-        viewHolder.tv_discount_price.setText("￥"+(Float.parseFloat(dataBean.getCoupon_start_fee()) - Float.parseFloat(dataBean.getCoupon_amount())));
+
+        viewHolder.tv_discount_price.setText("￥"+Utils.getDiscountPrice(dataBean.getCoupon_start_fee(),dataBean.getCoupon_amount()));
         viewHolder.tv_coupon_value.setText(dataBean.getCoupon_amount() + "元");
 
         viewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +90,7 @@ public class SearchListGridAdapter extends BaseAdapter {
 //                params.put("user_id",Constant.TB_USER_ID); 不确定是不是这个userid，暂时不传
                 params.put("text", dataBean.getTitle() + "\n" + dataBean.getItem_description());
                 params.put("url", Constant.URL_SAFE_HEADER + dataBean.getCoupon_share_url());
-                params.put("logo", Constant.URL_HEADER + dataBean.getPict_url());
+                params.put("logo", dataBean.getPict_url());
                 new RequestHelper<TklBean>().request(Constant.CREATE_TAO_WORDS, params, new RequestHelper.OnRequestListener<TklBean>() {
                     @Override
                     public void onError(String msg) {
@@ -146,34 +139,38 @@ public class SearchListGridAdapter extends BaseAdapter {
                 }, TklBean.class);
             }
         });
-        return convertView;
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return dataBeanList==null?0:dataBeanList.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return dataBeanList!=null?dataBeanList.get(position):null;
-    }
-
-    class ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.iv_cover)
         ImageView iv_cover;
+        @BindView(R.id.tv_title)
         TextView tv_title;
+        @BindView(R.id.tv_shop_name)
         TextView tv_shop_name;
+        @BindView(R.id.tv_ori_price)
         TextView tv_ori_price;
+        @BindView(R.id.tv_selled_count)
         TextView tv_selled_count;
+        @BindView(R.id.tv_discount_price)
         TextView tv_discount_price;
+        @BindView(R.id.tv_coupon_value)
         TextView tv_coupon_value;
+        @BindView(R.id.ll_get_coupon)
         LinearLayout ll_get_coupon;
+        @BindView(R.id.rl_container)
         RelativeLayout rl_container;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,SizeUtils.dp2px(280));
+            itemView.setLayoutParams(layoutParams);
+        }
     }
 
 }

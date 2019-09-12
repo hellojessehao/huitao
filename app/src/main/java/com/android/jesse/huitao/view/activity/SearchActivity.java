@@ -1,5 +1,6 @@
 package com.android.jesse.huitao.view.activity;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +24,8 @@ import android.widget.Toast;
 
 import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.utils.CacheHelper;
+import com.android.jesse.huitao.utils.LogUtil;
+import com.android.jesse.huitao.utils.ScreenManager;
 import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 import com.android.jesse.huitao.view.adapter.CommonFragmentAdapter;
@@ -63,6 +67,20 @@ public class SearchActivity extends BaseActivity {
     LinearLayout ll_filter_container;
     @BindView(R.id.switch_only_coupon_goods)
     Switch switch_only_coupon_goods;
+    @BindView(R.id.tv_filter_hot)
+    TextView tv_filter_hot;
+    @BindView(R.id.tv_selled_count_text)
+    TextView tv_selled_count_text;
+    @BindView(R.id.iv_up_arrow_selled_count)
+    ImageView iv_up_arrow_selled_count;
+    @BindView(R.id.iv_down_arrowselled_count)
+    ImageView iv_down_arrowselled_count;
+    @BindView(R.id.tv_price_text)
+    TextView tv_price_text;
+    @BindView(R.id.iv_up_arrow_price)
+    ImageView iv_up_arrow_price;
+    @BindView(R.id.iv_down_arrow_price)
+    ImageView iv_down_arrow_price;
 
     private List<String> historyList;
     private TagAdapter tagAdapter;
@@ -77,7 +95,11 @@ public class SearchActivity extends BaseActivity {
     public static final int TYPE_OVERSEA = 3;
     private int searchType = TYPE_TAOBAO;//1为同步，2为名师
     public static Conditions condition = Conditions.HOT;
-    public static boolean onlyCouponGoods = false;
+    private Conditions lastCondition = Conditions.HOT;
+    public static boolean is_overseas = false;//是否海外商品
+    public static boolean is_tmall = false;//是否天猫商品
+    public static boolean has_coupon = true;//是否有优惠券
+    private InputMethodManager inputMethodManager;
 
     @Override
     protected int getLayout() {
@@ -86,6 +108,13 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void initEventAndData() {
+        ScreenManager.getInstance().setDeepStatusBar(true,mContext);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        condition = Conditions.HOT;
+        is_overseas = false;//是否海外商品
+        is_tmall = false;//是否天猫商品
+        has_coupon = true;//是否有优惠券
+
         historyList = new ArrayList<>();
         fragments = new ArrayList<>();
         //初始化fragments
@@ -127,23 +156,7 @@ public class SearchActivity extends BaseActivity {
         tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                String content = et_search.getText().toString().trim();
-                if (tab.getPosition() == 0) {
-                    searchType = TYPE_TAOBAO;
-                    if (!TextUtils.isEmpty(content)) {
-                        taobaoFragment.search(content);
-                    }
-                } else if (tab.getPosition() == 1) {
-                    searchType = TYPE_TMALL;
-                    if (!TextUtils.isEmpty(content)) {
-                        tmallFragment.search(content);
-                    }
-                } else if(tab.getPosition() == 2){
-                    searchType = TYPE_OVERSEA;
-                    if (!TextUtils.isEmpty(content)) {
-                        overSeaFragment.search(content);
-                    }
-                }
+                refreshData(tab);
             }
 
             @Override
@@ -173,6 +186,7 @@ public class SearchActivity extends BaseActivity {
                     et_search.setText("");
                     et_search.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_search, 0, 0, 0);
                     rl_pager_container.setVisibility(View.GONE);
+                    ll_filter_container.setVisibility(View.GONE);
                 }
                 return false;
             }
@@ -196,6 +210,7 @@ public class SearchActivity extends BaseActivity {
                     et_search.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_search, 0, 0, 0);
                     rl_search_history_container.setVisibility(View.VISIBLE);
                     rl_pager_container.setVisibility(View.GONE);
+                    ll_filter_container.setVisibility(View.GONE);
                     getHistory();
                 }
             }
@@ -206,8 +221,8 @@ public class SearchActivity extends BaseActivity {
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            onlyCouponGoods = isChecked;
-            refreshData();
+            has_coupon = isChecked;
+            refreshData(null);
         }
     };
 
@@ -234,6 +249,7 @@ public class SearchActivity extends BaseActivity {
                     if(!TextUtils.isEmpty(content) && !TextUtils.isEmpty(content.trim())){
                         tab_layout.setVisibility(View.VISIBLE);
                         rl_pager_container.setVisibility(View.VISIBLE);
+                        ll_filter_container.setVisibility(View.VISIBLE);
                         rl_search_history_container.setVisibility(View.GONE);
                         historyList.remove(position);
                         if(Utils.isListEmpty(Utils.checkIsItemExist(historyList,et_search.getText().toString().trim()))){//去重
@@ -242,6 +258,7 @@ public class SearchActivity extends BaseActivity {
                         CacheHelper.cacheSearchHistory(historyList);
                         et_search.setText(content.trim());
                         et_search.setSelection(content.trim().length());
+                        inputMethodManager.hideSoftInputFromWindow(et_search.getWindowToken(),0);
                         if(searchType == TYPE_TAOBAO){
                             taobaoFragment.search(content.trim());
                         }else if(searchType == TYPE_TMALL){
@@ -271,8 +288,10 @@ public class SearchActivity extends BaseActivity {
                 }
                 tab_layout.setVisibility(View.VISIBLE);
                 rl_pager_container.setVisibility(View.VISIBLE);
+                ll_filter_container.setVisibility(View.VISIBLE);
                 rl_search_history_container.setVisibility(View.GONE);
                 String content = et_search.getText().toString().trim();
+                inputMethodManager.hideSoftInputFromWindow(et_search.getWindowToken(),0);
                 if (searchType == TYPE_TAOBAO) {
                     taobaoFragment.search(content);
                 } else if (searchType == TYPE_TMALL) {
@@ -297,34 +316,124 @@ public class SearchActivity extends BaseActivity {
                 Toast.makeText(mContext, "已清空", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_filter_hot:
+                lastCondition = condition;
                 condition = Utils.Conditions.HOT;
-                refreshData();
+                refreshFilterUi();
+                refreshData(null);
                 break;
             case R.id.rl_selled_count_filter:
+                lastCondition = condition;
                 if(condition == Utils.Conditions.SELL_UP){
                     condition = Utils.Conditions.SELL_DOWN;
                 }else if(condition == Utils.Conditions.SELL_DOWN){
                     condition = Utils.Conditions.SELL_UP;
                 }else{
-                    condition = Utils.Conditions.SELL_UP;
+                    condition = Utils.Conditions.SELL_DOWN;
                 }
-                refreshData();
+                refreshFilterUi();
+                refreshData(null);
                 break;
             case R.id.rl_price_filter:
+                lastCondition = condition;
                 if(condition == Utils.Conditions.PRICE_UP){
                     condition = Utils.Conditions.PRICE_DOWN;
                 }else if(condition == Utils.Conditions.PRICE_DOWN){
                     condition = Utils.Conditions.PRICE_UP;
                 }else{
-                    condition = Utils.Conditions.SELL_UP;
+                    condition = Utils.Conditions.PRICE_UP;
                 }
-                refreshData();
+                refreshFilterUi();
+                refreshData(null);
                 break;
         }
     }
 
-    private void refreshData(){
+    /**
+     * 根据条件刷新UI
+     */
+    private void refreshFilterUi(){
+        resetLastFilter();
+        switch (condition){
+            case HOT:
+                tv_filter_hot.setTextColor(getResources().getColor(R.color.color_selected_tags));
+                break;
+            case SELL_UP:
+                tv_selled_count_text.setTextColor(getResources().getColor(R.color.color_selected_tags));
+                iv_up_arrow_selled_count.setImageResource(R.mipmap.ic_up_arrow_orange);
+                break;
+            case SELL_DOWN:
+                tv_selled_count_text.setTextColor(getResources().getColor(R.color.color_selected_tags));
+                iv_down_arrowselled_count.setImageResource(R.mipmap.ic_down_arrow_orange);
+                break;
+            case PRICE_UP:
+                tv_price_text.setTextColor(getResources().getColor(R.color.color_selected_tags));
+                iv_up_arrow_price.setImageResource(R.mipmap.ic_up_arrow_orange);
+                break;
+            case PRICE_DOWN:
+                tv_price_text.setTextColor(getResources().getColor(R.color.color_selected_tags));
+                iv_down_arrow_price.setImageResource(R.mipmap.ic_down_arrow_orange);
+                break;
+        }
+    }
 
+    private void resetLastFilter(){
+        switch (lastCondition){
+            case HOT:
+                tv_filter_hot.setTextColor(getResources().getColor(R.color.color_subtext_subtitle));
+                break;
+            case SELL_UP:
+                tv_selled_count_text.setTextColor(getResources().getColor(R.color.color_subtext_subtitle));
+                iv_up_arrow_selled_count.setImageResource(R.mipmap.ic_up_arrow_gray);
+                break;
+            case SELL_DOWN:
+                tv_selled_count_text.setTextColor(getResources().getColor(R.color.color_subtext_subtitle));
+                iv_down_arrowselled_count.setImageResource(R.mipmap.ic_down_arrow_gray);
+                break;
+            case PRICE_UP:
+                tv_price_text.setTextColor(getResources().getColor(R.color.color_subtext_subtitle));
+                iv_up_arrow_price.setImageResource(R.mipmap.ic_up_arrow_gray);
+                break;
+            case PRICE_DOWN:
+                tv_price_text.setTextColor(getResources().getColor(R.color.color_subtext_subtitle));
+                iv_down_arrow_price.setImageResource(R.mipmap.ic_down_arrow_gray);
+                break;
+        }
+    }
+
+    /**
+     * 根据条件刷新数据
+     */
+    private void refreshData(TabLayout.Tab tab){
+        if(tab == null){
+            tab = tab_layout.getTabAt(tab_layout.getSelectedTabPosition());
+        }
+        if(tab == null){
+            return;
+        }
+        String content = et_search.getText().toString().trim();
+        inputMethodManager.hideSoftInputFromWindow(et_search.getWindowToken(),0);
+        if (tab.getPosition() == 0) {
+            searchType = TYPE_TAOBAO;
+            if (!TextUtils.isEmpty(content)) {
+                is_overseas = false;
+                is_tmall = false;
+                taobaoFragment.search(content);
+            }
+        } else if (tab.getPosition() == 1) {
+            searchType = TYPE_TMALL;
+            if (!TextUtils.isEmpty(content)) {
+                is_overseas = false;
+                is_tmall = true;
+                tmallFragment.search(content);
+            }
+        } else if(tab.getPosition() == 2){
+            searchType = TYPE_OVERSEA;
+            if (!TextUtils.isEmpty(content)) {
+                is_overseas = true;
+                is_tmall = false;
+                overSeaFragment.search(content);
+            }
+        }
     }
 
 }

@@ -49,7 +49,7 @@
             android:background="@drawable/bg_white_stroke1_radius4"
             android:drawableStart="@mipmap/ic_search"
             android:drawablePadding="@dimen/dp_10"
-            android:hint="快速搜索商品/店铺"
+            android:hint="快速搜索商品"
             android:maxLines="1"
             android:paddingStart="@dimen/dp_10"
             android:singleLine="true"
@@ -121,10 +121,16 @@
             android:layout_width="match_parent"
             android:layout_height="39dp"
             app:tabIndicatorColor="@color/color_selected_tags"
-            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorFullWidth="true"
             app:tabSelectedTextColor="@color/color_selected_tags"
             app:tabTextColor="@color/color_maintext_title"
             app:tabMode="fixed" />
+
+        <View
+            android:id="@+id/v_driver_1_match_common_1"
+            style="@style/v_driver_1_match_common"
+            android:layout_below="@id/tab_layout"
+            />
 
         <LinearLayout
             android:id="@+id/ll_filter_container"
@@ -132,6 +138,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
+            android:layout_below="@id/v_driver_1_match_common_1"
             >
 
             <LinearLayout
@@ -147,7 +154,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="热门"
-                    android:textColor="@color/color_maintext_title"
+                    android:textColor="@color/color_selected_tags"
                     android:textSize="@dimen/sp_16"
                     android:gravity="center"
                     android:layout_gravity="center"
@@ -234,8 +241,8 @@
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/dp_25"
                 android:paddingEnd="@dimen/dp_15"
-                android:paddingTop="@dimen/dp_10"
-                android:paddingBottom="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
                 >
 
                 <TextView
@@ -262,6 +269,7 @@
                     android:textSize="@dimen/sp_16"
                     android:thumb="@drawable/selector_switch"
                     android:track="@drawable/selector_switch_track"
+                    android:checked="true"
                     />
             </LinearLayout>
 
@@ -270,7 +278,7 @@
         <View
             android:id="@+id/v_driver_1_match_common"
             style="@style/v_driver_1_match_common"
-            android:layout_below="@id/tab_layout"
+            android:layout_below="@id/ll_filter_container"
             />
 
         <android.support.v4.view.ViewPager
