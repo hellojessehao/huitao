@@ -30,7 +30,7 @@
             android:background="@drawable/bg_yellow_stroke_white"
             />
 
-        <EditText
+        <TextView
             android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -41,13 +41,16 @@
             android:background="@drawable/bg_white_stroke1_radius4"
             android:drawableStart="@mipmap/ic_search"
             android:drawablePadding="@dimen/dp_10"
-            android:hint="粘贴淘宝分享链接"
+            android:text="快速搜索商品"
+            android:gravity="center|left"
             android:maxLines="1"
             android:paddingStart="@dimen/dp_10"
             android:singleLine="true"
             android:textColorHint="@color/color_most_shallow"
             android:textSize="@dimen/sp_14"
             android:paddingEnd="@dimen/dp_10"
+            android:inputType="none"
+            android:textColor="@color/color_most_shallow"
             />
     </RelativeLayout>
 

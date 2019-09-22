@@ -101,6 +101,7 @@ public class SearchListFragment extends BaseFragment {
         bussinessMap.put("is_overseas",SearchActivity.is_overseas+"");
         bussinessMap.put("is_tmall",SearchActivity.is_tmall+"");
         bussinessMap.put("has_coupon",SearchActivity.has_coupon+"");
+        bussinessMap.put("need_free_shipment","true");//包邮
 //        bussinessMap.put("material_id",Constant.HIGH_COMMISSION_MATERIAL_ID_ZONGHE+"");
 //        bussinessMap.put("include_good_rate",true+"");//好评率高于平均
 //        bussinessMap.put("include_rfd_rate",true+"");//退款率低于平均

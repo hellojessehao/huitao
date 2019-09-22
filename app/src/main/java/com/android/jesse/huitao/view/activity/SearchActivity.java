@@ -81,6 +81,8 @@ public class SearchActivity extends BaseActivity {
     ImageView iv_up_arrow_price;
     @BindView(R.id.iv_down_arrow_price)
     ImageView iv_down_arrow_price;
+    @BindView(R.id.btn_search)
+    TextView btn_search;
 
     private List<String> historyList;
     private TagAdapter tagAdapter;
@@ -143,6 +145,7 @@ public class SearchActivity extends BaseActivity {
         String[] tabStrArr = {"淘宝", "天猫","海外"};
         fragmentAdapter = new CommonFragmentAdapter(fragments, getSupportFragmentManager());
         fragmentAdapter.setTitleArr(tabStrArr);
+        viewpager.setOffscreenPageLimit(3);
         viewpager.setAdapter(fragmentAdapter);
         tab_layout.setVisibility(View.GONE);
         for (int i = 0; i < tabStrArr.length; i++) {
@@ -216,6 +219,29 @@ public class SearchActivity extends BaseActivity {
             }
         });
         switch_only_coupon_goods.setOnCheckedChangeListener(onCheckedChangeListener);
+    }
+
+    private boolean isFirstTime = true;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus && isFirstTime){
+            isFirstTime = false;
+            if(getIntent() != null){
+                String content = getIntent().getStringExtra("content");
+                if(TextUtils.isEmpty(content) ||
+                        TextUtils.isEmpty(content.trim())){
+                    return;
+                }
+                tab_layout.setVisibility(View.VISIBLE);
+                rl_pager_container.setVisibility(View.VISIBLE);
+                ll_filter_container.setVisibility(View.VISIBLE);
+                rl_search_history_container.setVisibility(View.GONE);
+                et_search.setText(content);
+                btn_search.performClick();
+            }
+        }
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
