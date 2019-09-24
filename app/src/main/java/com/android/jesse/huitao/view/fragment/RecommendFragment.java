@@ -153,7 +153,7 @@ public class RecommendFragment extends BaseFragment {
     private OnBannerListener onBannerListener = new OnBannerListener() {
         @Override
         public void OnBannerClick(int position) {
-            ToastUtil.shortShow("点击了 : "+position);
+            //TODO:跳转商品详情页面
         }
     };
 

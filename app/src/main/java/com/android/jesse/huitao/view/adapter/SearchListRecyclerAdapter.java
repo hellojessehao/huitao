@@ -28,6 +28,7 @@ import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.RequestHelper;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
+import com.android.jesse.huitao.view.activity.GoodsDetailActivity;
 import com.blankj.utilcode.util.SizeUtils;
 
 import java.util.HashMap;
@@ -79,8 +80,9 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
         viewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:跳转商品详情页面
-                ToastUtil.shortShow("商品详情展示。。。");
+                Intent intent = new Intent(mContext,GoodsDetailActivity.class);
+                intent.putExtra("dataBean",dataBean);
+                mContext.startActivity(intent);
             }
         });
         viewHolder.ll_get_coupon.setOnClickListener(new View.OnClickListener() {

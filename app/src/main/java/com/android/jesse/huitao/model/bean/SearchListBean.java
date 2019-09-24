@@ -1,5 +1,6 @@
 package com.android.jesse.huitao.model.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -119,7 +120,7 @@ public class SearchListBean {
                 this.map_data = map_data;
             }
 
-            public static class MapDataBean {
+            public static class MapDataBean implements Serializable {
                 /**
                  * coupon_start_time : 2017-10-29
                  * coupon_end_time : 2017-10-29
@@ -634,7 +635,7 @@ public class SearchListBean {
                     this.real_post_fee = real_post_fee;
                 }
 
-                public static class SmallImagesBean {
+                public static class SmallImagesBean implements Serializable{
                     private List<String> string;
 
                     public List<String> getString() {

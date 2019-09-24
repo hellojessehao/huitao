@@ -24,9 +24,11 @@ import com.android.jesse.huitao.model.bean.GoodsListBean;
 import com.android.jesse.huitao.model.bean.TklBean;
 import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.GlideUtil;
+import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.RequestHelper;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
+import com.android.jesse.huitao.view.activity.GoodsDetailActivity;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 
@@ -70,8 +72,9 @@ public class TypesFragmentAdapter extends RecyclerView.Adapter<TypesFragmentAdap
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:跳转商品详情页面
-                ToastUtil.shortShow("商品详情展示。。。");
+                Intent intent = new Intent(mContext,GoodsDetailActivity.class);
+                intent.putExtra("dataBean",dataBean);
+                mContext.startActivity(intent);
             }
         });
         viewHolder.ll_get_coupon.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.android.jesse.huitao.model.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -120,7 +121,7 @@ public class GoodsListBean extends BaseResponseBean{
                 this.map_data = map_data;
             }
 
-            public static class MapDataBean {
+            public static class MapDataBean implements Serializable {
                 /**
                  * coupon_amount : 40
                  * small_images : {"string":[""]}
@@ -217,6 +218,8 @@ public class GoodsListBean extends BaseResponseBean{
                 private String new_user_price;
                 private String coupon_info;
                 private String coupon_share_url;
+                private String item_url;
+                private String url;
                 private String nick;
                 private String reserve_price;
                 private String ju_online_end_time;
@@ -551,6 +554,22 @@ public class GoodsListBean extends BaseResponseBean{
                     this.coupon_share_url = coupon_share_url;
                 }
 
+                public String getItem_url() {
+                    return item_url;
+                }
+
+                public void setItem_url(String item_url) {
+                    this.item_url = item_url;
+                }
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+
                 public String getNick() {
                     return nick;
                 }
@@ -655,7 +674,7 @@ public class GoodsListBean extends BaseResponseBean{
                     this.multi_coupon_item_count = multi_coupon_item_count;
                 }
 
-                public static class SmallImagesBean {
+                public static class SmallImagesBean implements Serializable{
                     private List<String> string;
 
                     public List<String> getString() {
@@ -667,7 +686,7 @@ public class GoodsListBean extends BaseResponseBean{
                     }
                 }
 
-                public static class WordListBean {
+                public static class WordListBean implements Serializable{
                     private List<WordMapDataBean> word_map_data;
 
                     public List<WordMapDataBean> getWord_map_data() {

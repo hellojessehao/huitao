@@ -13,9 +13,10 @@ public class Constant {
     public static final String CREATE_TAO_WORDS = "taobao.tbk.tpwd.create";//生成淘口令
     public static final String POPULARIZE_COUPONS_GET = "taobao.tbk.coupon.get";//推广券获取
     public static final String TKL_CONVERT = "taobao.tbk.tpwd.convert";//邀约制接口 暂无权限
-    public static final String GOODS_LIST_GET = "taobao.tbk.dg.optimus.material";//获取商品列表
-    public static final String GOODS_SEARCH = "taobao.tbk.dg.material.optional";//根据关键词搜索商品
+    public static final String GOODS_LIST_GET = "taobao.tbk.dg.optimus.material";//淘宝客-推广者-物料精选
+    public static final String GOODS_SEARCH = "taobao.tbk.dg.material.optional";//淘宝客【推广者】物料搜索
     public static final String SHOP_SEARCH = "taobao.tbk.shop.get";//根据关键词搜索店铺
+    public static final String GOODS_DETAIL_GET = "taobao.tbk.item.info.get";//淘宝客-公用-淘宝客商品详情查询(简版)
     //@}
 
     //@第三方平台参数{
