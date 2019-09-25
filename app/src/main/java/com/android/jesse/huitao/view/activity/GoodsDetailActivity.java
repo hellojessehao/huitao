@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -21,6 +23,7 @@ import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.model.bean.GoodsDetailBean;
 import com.android.jesse.huitao.model.bean.GoodsListBean;
+import com.android.jesse.huitao.model.bean.RelativeGoodsBean;
 import com.android.jesse.huitao.model.bean.SearchListBean;
 import com.android.jesse.huitao.model.bean.TklBean;
 import com.android.jesse.huitao.utils.DateUtils;
@@ -32,7 +35,10 @@ import com.android.jesse.huitao.utils.ScreenManager;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
+import com.android.jesse.huitao.view.adapter.RelativeGoodsRecyclerAdapter;
+import com.android.jesse.huitao.view.custom.OffsetRecyclerDivider;
 import com.android.jesse.huitao.view.fragment.RecommendFragment;
+import com.blankj.utilcode.util.SizeUtils;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -73,6 +79,14 @@ public class GoodsDetailActivity extends BaseActivity {
     TextView tv_valide_date_end;
     @BindView(R.id.tv_recommend_reason)
     TextView tv_recommend_reason;
+    @BindView(R.id.tv_seller_name)
+    TextView tv_seller_name;
+    @BindView(R.id.tv_get_coupon)
+    TextView tv_get_coupon;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.tv_no_data)
+    TextView tv_no_data;
 
     private Object dataBean;
     private final int TYPE_GOODS_LIST = 0;
@@ -82,6 +96,8 @@ public class GoodsDetailActivity extends BaseActivity {
     private SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean searchListBean;
     private ClipboardManager clipboardManager;
     private Dialog useCouponDialog;
+    private long itemId = -1;//商品id
+    RequestHelper requestHelper;
 
     @Override
     protected int getLayout() {
@@ -91,6 +107,7 @@ public class GoodsDetailActivity extends BaseActivity {
     @Override
     protected void initEventAndData() {
         ScreenManager.getInstance().setDeepStatusBar(true, mContext);
+        requestHelper = new RequestHelper();
         if (getIntent() != null) {
             clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             mBanner.setIndicatorGravity(BannerConfig.CENTER);
@@ -99,68 +116,138 @@ public class GoodsDetailActivity extends BaseActivity {
             mBanner.setOnBannerListener(onBannerListener);
 
             dataBean = getIntent().getSerializableExtra("dataBean");
-            if (dataBean instanceof GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean) {
-                dataType = TYPE_GOODS_LIST;
-                GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean mapDataBean = (GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean) dataBean;
-                goodsListBean = mapDataBean;
-                List<String> imageUrlList = new ArrayList<>();
-                for (int i = 0; i < mapDataBean.getSmall_images().getString().size(); i++) {
-                    imageUrlList.add(Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
-                    LogUtil.i(TAG + " url : " + Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
-                }
-                mBanner.setImages(imageUrlList);
-                mBanner.start();
+            if(dataBean != null){
+                if (dataBean instanceof GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean) {
+                    dataType = TYPE_GOODS_LIST;
+                    GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean mapDataBean = (GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean) dataBean;
+                    goodsListBean = mapDataBean;
+                    itemId = mapDataBean.getItem_id();
 
-                tv_title.setText(mapDataBean.getTitle());
-                tv_discount_price.setText("￥" + Utils.getDiscountPrice(mapDataBean.getCoupon_start_fee(), mapDataBean.getCoupon_amount()));
-                SpannableString spannableString = new SpannableString("原价:￥" + mapDataBean.getCoupon_start_fee());
-                spannableString.setSpan(new StrikethroughSpan(), 0, tv_ori_price_text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                tv_ori_price_text.setText(spannableString);
-                tv_selled_count.setText(mapDataBean.getVolume() + "人已抢");
-                tv_coupon_value.setText("￥" + mapDataBean.getCoupon_amount());
-                String startTime = DateUtils.getFormatedDate(Long.parseLong(mapDataBean.getCoupon_start_time()), "yyyy-MM-dd");
-                String endTime = DateUtils.getFormatedDate(Long.parseLong(mapDataBean.getCoupon_end_time()), "yyyy-MM-dd");
-                tv_valide_date_start.setText(startTime);
-                tv_valide_date_end.setText(endTime);
-                if (TextUtils.isEmpty(mapDataBean.getItem_description())) {
-                    tv_recommend_reason.setVisibility(View.GONE);
-                } else {
-                    SpannableString span = new SpannableString("推荐理由:" + mapDataBean.getItem_description());
-                    span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)),0,5,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                    tv_recommend_reason.setText(span);
-                }
-            } else if (dataBean instanceof SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean) {
-                dataType = TYPE_SEARCH_LIST;
-                SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean mapDataBean = (SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean) dataBean;
-                searchListBean = mapDataBean;
-                mBanner.setImages(mapDataBean.getSmall_images().getString());
-                mBanner.start();
+                    List<String> imageUrlList = new ArrayList<>();
+                    for (int i = 0; i < mapDataBean.getSmall_images().getString().size(); i++) {
+                        imageUrlList.add(Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
+                        LogUtil.i(TAG + " url : " + Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
+                    }
+                    mBanner.setImages(imageUrlList);
+                    mBanner.start();
 
-                tv_title.setText(mapDataBean.getTitle());
-                tv_discount_price.setText("￥" + Utils.getDiscountPrice(mapDataBean.getCoupon_start_fee(), mapDataBean.getCoupon_amount()));
-                SpannableString spannableString = new SpannableString("原价:￥" + mapDataBean.getCoupon_start_fee());
-                spannableString.setSpan(new StrikethroughSpan(), 0, tv_ori_price_text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                tv_ori_price_text.setText(spannableString);
-                tv_selled_count.setText(mapDataBean.getVolume() + "人已抢");
-                tv_coupon_value.setText("￥" + mapDataBean.getCoupon_amount());
-                tv_valide_date_start.setText(mapDataBean.getCoupon_start_time());
-                tv_valide_date_end.setText(mapDataBean.getCoupon_end_time());
-                if (TextUtils.isEmpty(mapDataBean.getItem_description())) {
-                    tv_recommend_reason.setVisibility(View.GONE);
-                } else {
-                    SpannableString span = new SpannableString("推荐理由:" + mapDataBean.getItem_description());
-                    span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)),0,5,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                    tv_recommend_reason.setText(span);
-                }
+                    tv_title.setText(mapDataBean.getTitle());
+                    tv_discount_price.setText("￥" + Utils.getDiscountPrice(mapDataBean.getCoupon_start_fee(), mapDataBean.getCoupon_amount()));
+                    SpannableString spannableString = new SpannableString("原价:￥" + mapDataBean.getCoupon_start_fee());
+                    spannableString.setSpan(new StrikethroughSpan(), 0, tv_ori_price_text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    tv_ori_price_text.setText(spannableString);
+                    tv_selled_count.setText(mapDataBean.getVolume() + "人已抢");
+                    tv_coupon_value.setText("￥" + mapDataBean.getCoupon_amount());
+                    String startTime = DateUtils.getFormatedDate(Long.parseLong(mapDataBean.getCoupon_start_time()), "yyyy-MM-dd");
+                    String endTime = DateUtils.getFormatedDate(Long.parseLong(mapDataBean.getCoupon_end_time()), "yyyy-MM-dd");
+                    tv_valide_date_start.setText(startTime);
+                    tv_valide_date_end.setText(endTime);
+                    tv_seller_name.setText(mapDataBean.getShop_title());
+                    if (TextUtils.isEmpty(mapDataBean.getItem_description())) {
+                        tv_recommend_reason.setVisibility(View.GONE);
+                    } else {
+                        SpannableString span = new SpannableString("推荐理由:" + mapDataBean.getItem_description());
+                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)),0,5,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        tv_recommend_reason.setText(span);
+                    }
+                } else if (dataBean instanceof SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean) {
+                    dataType = TYPE_SEARCH_LIST;
+                    SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean mapDataBean = (SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean) dataBean;
+                    searchListBean = mapDataBean;
+                    itemId = mapDataBean.getItem_id();
 
+                    mBanner.setImages(mapDataBean.getSmall_images().getString());
+                    mBanner.start();
+
+                    tv_title.setText(mapDataBean.getTitle());
+                    tv_discount_price.setText("￥" + Utils.getDiscountPrice(mapDataBean.getCoupon_start_fee(), mapDataBean.getCoupon_amount()));
+                    SpannableString spannableString = new SpannableString("原价:￥" + mapDataBean.getCoupon_start_fee());
+                    spannableString.setSpan(new StrikethroughSpan(), 0, tv_ori_price_text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    tv_ori_price_text.setText(spannableString);
+                    tv_selled_count.setText(mapDataBean.getVolume() + "人已抢");
+                    tv_coupon_value.setText("￥" + mapDataBean.getCoupon_amount());
+                    tv_valide_date_start.setText(mapDataBean.getCoupon_start_time());
+                    tv_valide_date_end.setText(mapDataBean.getCoupon_end_time());
+                    tv_seller_name.setText(mapDataBean.getShop_title());
+                    if (TextUtils.isEmpty(mapDataBean.getItem_description())) {
+                        tv_recommend_reason.setVisibility(View.GONE);
+                    } else {
+                        SpannableString span = new SpannableString("推荐理由:" + mapDataBean.getItem_description());
+                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)),0,5,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        tv_recommend_reason.setText(span);
+                    }
+                }
+                //获取关联推荐的商品
+                LogUtil.i(TAG+" itemId = "+itemId);
+                if(itemId >= 0){
+                    Map<String,String> bussinessMap = new HashMap<>();
+                    bussinessMap.put("fields","num_iid,title,pict_url,reserve_price,zk_final_price,item_url,volume,nick");
+                    bussinessMap.put("num_iid",itemId+"");
+                    bussinessMap.put("count","40");
+                    bussinessMap.put("platform","2");
+
+                    requestHelper.request(Constant.RELATIVE_RECOMMEND,bussinessMap,onGetRelativeGoodsListener,RelativeGoodsBean.class);
+                }else{
+                    LogUtil.e(TAG+" id < 0 ,无关联商品");
+                }
+            }else{
+                itemId = getIntent().getLongExtra("itemId",-1);
+                if(itemId >= 0){
+                    //TODO:调用商品详情接口
+                }else{
+                    ToastUtil.shortShow("抱歉客官……没有找到该商品详情~\n去看看别的商品吧~");
+                    tv_get_coupon.setEnabled(false);
+                }
             }
+
         }
     }
+
+    private RequestHelper.OnRequestListener<RelativeGoodsBean> onGetRelativeGoodsListener = new RequestHelper.OnRequestListener<RelativeGoodsBean>() {
+        @Override
+        public void onError(String msg) {
+            tv_no_data.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onSuccess(RelativeGoodsBean resultBean) {
+            if(resultBean == null){
+                LogUtil.e(TAG+" get RelativeGoods : resultBean is null");
+                return;
+            }
+            if(Utils.isListEmpty(resultBean.getTbk_item_recommend_get_response().getResults().getN_tbk_item())){
+                LogUtil.e(TAG+" get RelativeGoods : dataBeanList is empty");
+                return;
+            }
+            RelativeGoodsRecyclerAdapter adapter = new RelativeGoodsRecyclerAdapter(mContext,resultBean.getTbk_item_recommend_get_response().getResults().getN_tbk_item());
+            recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+            OffsetRecyclerDivider divider = new OffsetRecyclerDivider();
+            divider.setBottom(SizeUtils.dp2px(5));
+            divider.setLeft(SizeUtils.dp2px(5));
+            recyclerView.addItemDecoration(divider);
+            recyclerView.setAdapter(adapter);
+        }
+    };
 
     private OnBannerListener onBannerListener = new OnBannerListener() {
         @Override
         public void OnBannerClick(int position) {
-            //TODO:全屏浏览全部banner图
+            Intent intent = new Intent(mContext,PicsBrowseActivity.class);
+            intent.putExtra(PicsBrowseActivity.INDEX_KEY,position);
+            switch (dataType){
+                case TYPE_GOODS_LIST:
+                    List<String> imageUrlList = new ArrayList<>();
+                    for (int i = 0; i < goodsListBean.getSmall_images().getString().size(); i++) {
+                        imageUrlList.add(Constant.URL_HEADER + goodsListBean.getSmall_images().getString().get(i));
+                        LogUtil.i(TAG + " url : " + Constant.URL_HEADER + goodsListBean.getSmall_images().getString().get(i));
+                    }
+                    intent.putExtra(PicsBrowseActivity.LIST_KEY,new ArrayList<>(imageUrlList));
+                    break;
+                case TYPE_SEARCH_LIST:
+                    intent.putExtra(PicsBrowseActivity.LIST_KEY,new ArrayList<>(searchListBean.getSmall_images().getString()));
+                    break;
+            }
+            startActivity(intent);
         }
     };
 

@@ -312,6 +312,24 @@ public class Utils {
     }
 
     /**
+     * 获取优惠券价格
+     * @param reservePrice 优惠券起用价
+     * @param discountPrice 优惠券抵扣价
+     * @return 商品折扣价
+     */
+    public static float getCouponAmount(String reservePrice,String discountPrice){
+        float oriPrice = 0;
+        float cheaperPrice = 0;
+        if(!TextUtils.isEmpty(reservePrice)){
+            oriPrice = Float.parseFloat(reservePrice);
+        }
+        if(!TextUtils.isEmpty(discountPrice)){
+            cheaperPrice = Float.parseFloat(discountPrice);
+        }
+        return oriPrice-cheaperPrice;
+    }
+
+    /**
      * 判断是否高于6.0版本
      */
     public static boolean isHigherThanM(){

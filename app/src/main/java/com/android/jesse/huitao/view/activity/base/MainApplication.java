@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.android.jesse.huitao.utils.CrashHandler;
 import com.android.jesse.huitao.utils.SharedPreferencesUtil;
+import com.pgyersdk.crash.PgyCrashManager;
 
 /**
  * @Description: Application类
@@ -32,5 +33,7 @@ public class MainApplication extends Application {
         //初始化崩溃监听器，崩溃日志将存于 mnt/sdcard/tbcrash 目录下
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
+        //注册蒲公英日志上传
+        PgyCrashManager.register(); //推荐使用
     }
 }

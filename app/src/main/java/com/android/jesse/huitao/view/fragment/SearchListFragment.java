@@ -121,7 +121,6 @@ public class SearchListFragment extends BaseFragment {
         @Override
         public void onError(String msg) {
             Utils.resetRefreshViewState(srl_refresh,false);
-            Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
             tv_no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }

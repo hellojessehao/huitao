@@ -4,7 +4,10 @@ buildscript {
     
     repositories {
         google()
-        jcenter()
+//        jcenter()
+        mavenCentral()
+        maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0'
@@ -19,6 +22,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
     }
 }
 

@@ -17,12 +17,14 @@ public class Constant {
     public static final String GOODS_SEARCH = "taobao.tbk.dg.material.optional";//淘宝客【推广者】物料搜索
     public static final String SHOP_SEARCH = "taobao.tbk.shop.get";//根据关键词搜索店铺
     public static final String GOODS_DETAIL_GET = "taobao.tbk.item.info.get";//淘宝客-公用-淘宝客商品详情查询(简版)
+    public static final String RELATIVE_RECOMMEND = "taobao.tbk.item.recommend.get";//淘宝客-公用-商品关联推荐
     //@}
 
     //@第三方平台参数{
     public static final String APPKEY_TAOBAO = "27821806";
     public static final String APPSECRET_TAOBAO = "154972c8b8e369d1232e7a5acfd74584";
     public static final String TB_USER_ID = "783511823";
+    public static final String PGYER_APP_KEY = "1fbe0631ff1ab55d8045d85a874a1c09";
     //@}
 
     //淘客相关参数@{

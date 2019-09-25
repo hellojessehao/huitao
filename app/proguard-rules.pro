@@ -24,10 +24,9 @@
 -keep class sun.misc.Unsafe { *; }
 
 #蒲公英
-#-libraryjars libs/pgyer_sdk_3.0.4.jar
-#-dontwarn com.pgyersdk.**
-#-keep class com.pgyersdk.** { *; }
-#-keep class com.pgyersdk.**$* { *; }
+#-libraryjars libs/pgyer_sdk_x.x.jar
+-dontwarn com.pgyersdk.**
+-keep class com.pgyersdk.** { *; }
 
 #Glide
 -keep public class * implements  com.bumptech.glide.module.GlideModule

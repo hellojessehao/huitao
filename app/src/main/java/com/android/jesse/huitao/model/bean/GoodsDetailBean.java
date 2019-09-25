@@ -134,7 +134,7 @@ public class GoodsDetailBean {
                  */
 
                 private String cat_name;
-                private int num_iid;
+                private long num_iid;
                 private String title;
                 private String pict_url;
                 private SmallImagesBean small_images;
@@ -164,11 +164,11 @@ public class GoodsDetailBean {
                     this.cat_name = cat_name;
                 }
 
-                public int getNum_iid() {
+                public long getNum_iid() {
                     return num_iid;
                 }
 
-                public void setNum_iid(int num_iid) {
+                public void setNum_iid(long num_iid) {
                     this.num_iid = num_iid;
                 }
 

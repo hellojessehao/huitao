@@ -6,9 +6,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.android.jesse.huitao.R;
+import com.android.jesse.huitao.utils.ApkInfoUtils;
 import com.android.jesse.huitao.utils.HttpUtils;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.ToastUtil;
+import com.android.jesse.huitao.utils.UpgradeUtils;
 import com.android.jesse.huitao.view.activity.SearchActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 
@@ -33,7 +35,8 @@ public class SearchCouponsFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
-
+        //检查版本更新
+        UpgradeUtils.checkUpgrade(mContext);
     }
 
     @OnClick({R.id.btn_search,R.id.et_search})
@@ -60,6 +63,7 @@ public class SearchCouponsFragment extends BaseFragment {
 //                    intent.putExtra("content",et_search.getText().toString());
 //                    startActivity(intent);
 //                }
+
                 startActivity(new Intent(mContext,SearchActivity.class));
                 break;
         }

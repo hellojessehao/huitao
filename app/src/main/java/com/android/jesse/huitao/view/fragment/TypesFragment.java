@@ -70,7 +70,6 @@ public class TypesFragment extends BaseFragment {
         onRequestListener = new RequestHelper.OnRequestListener<GoodsListBean>() {
             @Override
             public void onError(String msg) {
-                Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
                 tv_no_data.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
             }
