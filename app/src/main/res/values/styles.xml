@@ -3,11 +3,18 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/color_20b18b</item>
+        <item name="colorPrimaryDark">@color/color_666666</item>
+        <item name="colorAccent">@color/color_20b18b</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="StartAppTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@mipmap/ic_flash_page</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
     <style name="v_driver_1_match_common">

@@ -10,23 +10,46 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="联系方式："
+        android:text="返现客服(点击号码复制)："
+        android:textColor="@color/color_selected_tags"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        />
+    <TextView
+        android:id="@+id/tv_wechat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="微信："
         android:textColor="@color/color_maintext_title"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:padding="@dimen/dp_5"
         />
+    <TextView
+        android:id="@+id/tv_qq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QQ："
+        android:textColor="@color/color_maintext_title"
+        android:textSize="16sp"
+        android:padding="@dimen/dp_5"
+        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="微信：17621044359"
+        android:layout_marginTop="@dimen/dp_30"
+        android:text="项目合伙人招募：\n
+
+1.后台(1人)：年龄20-30，后台开发经验3年以上，有上线项目。\n
+
+2.前端(1人)：年龄20-30，前端开发经验3年以上，有上线项目。\n
+
+有意向的联系上方QQ或微信号\n
+"
         android:textColor="@color/color_subtext_subtitle"
-        android:textSize="16sp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="QQ：316778169"
-        android:textColor="@color/color_subtext_subtitle"
-        android:textSize="16sp"
+        android:textSize="@dimen/sp_12"
+        android:padding="@dimen/dp_10"
+        android:gravity="center"
         />
 
 </LinearLayout>

@@ -84,4 +84,8 @@ public class Constant {
     //SPKEY@{
     public static final String SPKEY_SEARCH_HISTORY = "spkey_search_history";
     //@}
+    //客服账号@{
+    public static final String SERVICE_QQ = "983934995";
+    public static final String SERVICE_WECHAT = "android_jesse";
+    //@}
 }
