@@ -1,6 +1,7 @@
 package com.android.jesse.huitao.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -85,6 +86,25 @@ public class ApkInfoUtils {
         }
 
         return null;
+    }
+
+    /**
+     * 根据包名判断是否安装某应用
+     */
+    public static boolean hasInstalledApp(Context context,String packageName){
+        PackageInfo packageInfo;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(
+                    packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            packageInfo = null;
+            e.printStackTrace();
+        }
+        if (packageInfo == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

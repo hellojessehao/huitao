@@ -25,6 +25,7 @@ public class Constant {
     public static final String APPSECRET_TAOBAO = "154972c8b8e369d1232e7a5acfd74584";
     public static final String TB_USER_ID = "783511823";
     public static final String PGYER_APP_KEY = "1fbe0631ff1ab55d8045d85a874a1c09";
+    public static final String WECHAT_APP_ID = "wxe427ebd5fa3dadd7";
     //@}
 
     //淘客相关参数@{

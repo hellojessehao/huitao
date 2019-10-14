@@ -23,10 +23,16 @@
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 -keep class sun.misc.Unsafe { *; }
 
-#蒲公英
+#pgyer
 #-libraryjars libs/pgyer_sdk_x.x.jar
 -dontwarn com.pgyersdk.**
 -keep class com.pgyersdk.** { *; }
+-keep class com.pgyersdk.**$* { *; }
+
+# banner 的混淆代码
+-keep class com.youth.banner.** {
+    *;
+ }
 
 #Glide
 -keep public class * implements  com.bumptech.glide.module.GlideModule
@@ -506,6 +512,29 @@
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
+
+#百度云文字识别
+-keep class com.baidu.ocr.sdk.**{*;}
+-dontwarn com.baidu.ocr.**
+
+#科大讯飞
+-keep class com.iflytek.**{*;}
+-keepattributes Signature
+
+#阿里云oss文件上传
+-keep class com.alibaba.sdk.android.oss.** { *; }
+-dontwarn okio.**
+-dontwarn org.apache.commons.codec.binary.**
+
+#饺子播放器
+-keep public class cn.jzvd.JZMediaSystem {*; }
+-keep public class cn.jzvd.demo.CustomMedia.CustomMedia {*; }
+-keep public class cn.jzvd.demo.CustomMedia.JZMediaIjk {*; }
+-keep public class cn.jzvd.demo.CustomMedia.JZMediaSystemAssertFolder {*; }
+
+-keep class tv.danmaku.ijk.media.player.** {*; }
+-dontwarn tv.danmaku.ijk.media.player.*
+-keep interface tv.danmaku.ijk.media.player.** { *; }
 
 #------------------  下方是共性的排除项目         ----------------
 # 方法名中含有“JNI”字符的，认定是Java Native Interface方法，自动排除
