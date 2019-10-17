@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.utils.ToastUtil;
+import com.android.jesse.huitao.utils.WxApiUtils;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 
 import butterknife.BindView;
@@ -43,7 +44,7 @@ public class AboutUsFragment extends BaseFragment {
         tv_wechat.setText("微信："+Constant.SERVICE_WECHAT);
     }
 
-    @OnClick({R.id.tv_qq,R.id.tv_wechat})
+    @OnClick({R.id.tv_qq,R.id.tv_wechat,R.id.tv_share})
     public void onClick(View v){
         switch (v.getId()){
             case R.id.tv_qq:
@@ -55,6 +56,9 @@ public class AboutUsFragment extends BaseFragment {
                 ClipData wechatClip = ClipData.newPlainText("serviceWechat",Constant.SERVICE_WECHAT);
                 clipboardManager.setPrimaryClip(wechatClip);
                 ToastUtil.shortShow("官方微信号已复制到剪切板");
+                break;
+            case R.id.tv_share:
+                WxApiUtils.showShareDialog(mContext,R.mipmap.publish_qrcode);
                 break;
         }
     }

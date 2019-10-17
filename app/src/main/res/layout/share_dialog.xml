@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="分享到"
+        android:textSize="16sp"
+        android:textColor="@color/color_maintext_title"
+        android:layout_marginStart="@dimen/dp_15"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp_10"
+        >
+        <TextView
+            android:id="@+id/tv_wechat_friends"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="微信"
+            android:textColor="@color/color_subtext_subtitle"
+            android:drawableTop="@mipmap/ic_wechat_friends"
+            android:gravity="center"
+            android:textSize="@dimen/sp_12"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            />
+        <TextView
+            android:id="@+id/tv_wechat_session"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="朋友圈"
+            android:textColor="@color/color_subtext_subtitle"
+            android:drawableTop="@mipmap/ic_wechat_session"
+            android:gravity="center"
+            android:textSize="@dimen/sp_12"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="取消"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
+        android:textColor="@color/color_subtext_subtitle"
+        android:background="@color/color_most_shallow_background"
+        />
+
+</LinearLayout>

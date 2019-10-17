@@ -34,6 +34,7 @@ import com.android.jesse.huitao.utils.RequestHelper;
 import com.android.jesse.huitao.utils.ScreenManager;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
+import com.android.jesse.huitao.utils.WxApiUtils;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 import com.android.jesse.huitao.view.adapter.RelativeGoodsRecyclerAdapter;
 import com.android.jesse.huitao.view.custom.OffsetRecyclerDivider;
@@ -261,7 +262,7 @@ public class GoodsDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_get_coupon})
+    @OnClick({R.id.iv_back, R.id.tv_get_coupon,R.id.iv_share})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
@@ -382,6 +383,9 @@ public class GoodsDetailActivity extends BaseActivity {
                         }, TklBean.class);
                         break;
                 }
+                break;
+            case R.id.iv_share:
+//                WxApiUtils.showShareDialog();
                 break;
         }
     }

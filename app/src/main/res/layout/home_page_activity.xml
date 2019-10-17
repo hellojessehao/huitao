@@ -79,7 +79,7 @@
             app:unselectedTextColor="@color/color_maintext_title"
             app:imgWidth="24dp"
             app:imgHeight="24dp"
-            app:tabName="关于我们"
+            app:tabName="返现"
             app:tabIndex="2"
             />
     </LinearLayout>

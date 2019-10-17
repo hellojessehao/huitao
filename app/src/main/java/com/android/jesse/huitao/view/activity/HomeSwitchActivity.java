@@ -35,6 +35,6 @@ public class HomeSwitchActivity extends BaseActivity {
 
     @Override
     protected void initEventAndData() {
-        mHandler.sendEmptyMessageDelayed(0,1000);
+        mHandler.sendEmptyMessageDelayed(0,2000);
     }
 }
