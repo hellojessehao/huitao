@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 
 import com.android.jesse.huitao.R;
@@ -29,6 +30,8 @@ import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.SearchActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 import com.android.jesse.huitao.view.adapter.CommonFragmentAdapter;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SizeUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -64,6 +67,10 @@ public class RecommendFragment extends BaseFragment {
     ViewPager view_pager;
     @BindView(R.id.srl_refresh)
     SmartRefreshLayout srl_refresh;
+    @BindView(R.id.ll_content_container)
+    LinearLayout ll_content_container;
+    @BindView(R.id.view_divider)
+    View view_divider;
 
     private int pager = 1;
     private int size = 20;
@@ -120,15 +127,80 @@ public class RecommendFragment extends BaseFragment {
         List<Fragment> fragments = new ArrayList<>();
         for(int i=0;i<tabStrArr.length;i++){
             TypesFragment typesFragment = TypesFragment.getInstance(i);
+            typesFragment.setOnRecyclerScrollListener(onRecyclerScrollListener);
             fragments.add(typesFragment);
         }
+        view_pager.setOffscreenPageLimit(tabStrArr.length);
         adapter = new CommonFragmentAdapter(fragments,getChildFragmentManager());
         view_pager.setAdapter(adapter);
         tab_layout.setupWithViewPager(view_pager);
         for(int i=0;i<tabStrArr.length;i++){
             tab_layout.getTabAt(i).setText(tabStrArr[i]);
         }
+        LinearLayout.LayoutParams pagerParams = (LinearLayout.LayoutParams) view_pager.getLayoutParams();
+        pagerParams.height = ScreenUtils.getScreenHeight();
+        view_pager.setLayoutParams(pagerParams);
+        view_pager.addOnPageChangeListener(onPageChangeListener);
     }
+
+    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            //重置位移参数
+            ll_content_container.scrollTo(0,0);
+            totalScroll = 0;
+            totalDy = 0;
+            lastDy = 0;
+            jumpNextUpCase = false;
+            jumpNextLowCase = false;
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
+
+    int totalScroll;
+    int totalDy;
+    int lastDy;
+    boolean jumpNextUpCase,jumpNextLowCase;//跳过下一次dy>0 ； 跳过下一次dy<0
+    int topLine = -SizeUtils.dp2px(180);//最高偏移量(banner的高度)
+
+    private TypesFragment.OnRecyclerScrollListener onRecyclerScrollListener = new TypesFragment.OnRecyclerScrollListener() {
+        @Override
+        public void onRecyclerScroll(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            lastDy = dy;
+            totalDy += dy;
+            if(jumpNextLowCase && dy < 0){
+                jumpNextLowCase = false;
+                return;
+            }else if(jumpNextUpCase && dy > 0){
+                jumpNextUpCase = false;
+                return;
+            }
+            if(dy > 0 && totalScroll > topLine){
+                totalScroll -= dy;
+                if(totalScroll <= topLine){
+                    totalScroll = topLine;
+                }
+                ll_content_container.scrollTo(0,-totalScroll);
+                jumpNextLowCase = true;
+            }else if(dy < 0 && totalScroll < 0 && Math.abs(totalDy) < -topLine){
+                totalScroll -= dy;
+                if(totalScroll > 0){
+                    totalScroll = 0;
+                }
+                ll_content_container.scrollTo(0,-totalScroll);
+                jumpNextUpCase = true;
+            }
+        }
+    };
 
     private void getBannerData(){
         new Thread(new Runnable() {

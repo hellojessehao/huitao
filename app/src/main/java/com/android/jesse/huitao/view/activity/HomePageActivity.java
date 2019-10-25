@@ -3,13 +3,17 @@ package com.android.jesse.huitao.view.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.android.jesse.huitao.R;
+import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 import com.android.jesse.huitao.view.custom.TabItemView;
@@ -156,4 +160,30 @@ public class HomePageActivity extends BaseActivity {
             }
         }
     }
+
+    private long lastMills,currentMills;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            currentMills = System.currentTimeMillis();
+            if(lastMills > 0 && currentMills - lastMills <= 1500){
+                finish();
+                return true;
+            }else{
+                Toast.makeText(mContext, "再按一次退出应用", Toast.LENGTH_SHORT).show();
+                lastMills = currentMills;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lastMills = 0;
+                    }
+                },1500);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
 }

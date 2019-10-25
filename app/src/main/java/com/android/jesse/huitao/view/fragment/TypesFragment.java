@@ -1,5 +1,7 @@
 package com.android.jesse.huitao.view.fragment;
 
+import android.annotation.TargetApi;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,6 +68,8 @@ public class TypesFragment extends BaseFragment {
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext,LinearLayoutManager.VERTICAL,SizeUtils.dp2px(1),
                 getResources().getColor(R.color.color_most_shallow)));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(onScrollChangeListener);
+
         requestHelper = new RequestHelper<>();
         onRequestListener = new RequestHelper.OnRequestListener<GoodsListBean>() {
             @Override
@@ -90,6 +94,22 @@ public class TypesFragment extends BaseFragment {
 
         getData();
     }
+
+    private RecyclerView.OnScrollListener onScrollChangeListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if(onRecyclerScrollListener != null){
+                onRecyclerScrollListener.onRecyclerScroll(recyclerView,dx,dy);
+            }
+        }
+
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+    };
 
     /**
      * 根据type请求相关数据
@@ -157,5 +177,19 @@ public class TypesFragment extends BaseFragment {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public interface OnRecyclerScrollListener{
+        void onRecyclerScroll(@NonNull RecyclerView recyclerView, int dx, int dy);
+    }
+
+    private OnRecyclerScrollListener onRecyclerScrollListener;
+
+    public OnRecyclerScrollListener getOnRecyclerScrollListener() {
+        return onRecyclerScrollListener;
+    }
+
+    public void setOnRecyclerScrollListener(OnRecyclerScrollListener onRecyclerScrollListener) {
+        this.onRecyclerScrollListener = onRecyclerScrollListener;
     }
 }

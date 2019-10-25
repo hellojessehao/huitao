@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.jesse.huitao.utils.ScreenManager;
+import com.umeng.message.PushAgent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -26,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         mUnBinder = ButterKnife.bind(this);
+        PushAgent.getInstance(mContext).onAppStart();//友盟统计
         mContext = this;
         ScreenManager.getInstance().setStatusBar(true,mContext);//设置沉浸式状态栏
         initEventAndData();

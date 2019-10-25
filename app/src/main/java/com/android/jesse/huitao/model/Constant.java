@@ -26,6 +26,8 @@ public class Constant {
     public static final String TB_USER_ID = "783511823";
     public static final String PGYER_APP_KEY = "1fbe0631ff1ab55d8045d85a874a1c09";
     public static final String WECHAT_APP_ID = "wxe427ebd5fa3dadd7";
+    public static final String UMENG_APP_KEY = "5db25ceb3fc1951b4e0006b0";
+    public static final String UMENG_MESSAGE_SECRET = "6c7542b5e95e5daabe16aa0584b34f0e";
     //@}
 
     //淘客相关参数@{

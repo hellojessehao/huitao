@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.message.PushAgent;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
