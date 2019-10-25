@@ -14,11 +14,14 @@ import com.taobao.api.internal.util.StringUtils;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -326,7 +329,15 @@ public class Utils {
         if(!TextUtils.isEmpty(discountPrice)){
             cheaperPrice = Float.parseFloat(discountPrice);
         }
-        return oriPrice-cheaperPrice;
+        return Float.parseFloat(saveOnePositionAfterDot(oriPrice-cheaperPrice));
+    }
+
+    /**
+     * 保留小数点后一位
+     */
+    public static String saveOnePositionAfterDot(float price){
+        DecimalFormat format = new DecimalFormat("0.0");
+        return format.format(price);
     }
 
     /**
@@ -337,6 +348,45 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 判断传入的字符串是不是网址
+     */
+    public static boolean isNetAddress(String string){
+        String regex = "(((https|http)?://)?([a-z0-9]+[.])|(www.))"
+                + "\\w+[.|\\/]([a-z0-9]{0,})?[[.]([a-z0-9]{0,})]+((/[\\S&&[^,;\u4E00-\u9FA5]]+)+)?([.][a-z0-9]{0,}+|/?)";//设置正则表达式
+        Pattern pat = Pattern.compile(regex.trim());//对比
+        Matcher mat = pat.matcher(string.trim());
+        return mat.matches();
+    }
+
+    /**
+     * 生成分享的淘口令文本
+     */
+    public static String generateShareTkl(String title,String oriPrice,String discountPrice,String url,String tkl){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(title)
+                .append("\n")
+                .append("【在售价】")
+                .append(oriPrice)
+                .append("元")
+                .append("\n");
+        if(!TextUtils.isEmpty(discountPrice) && Float.parseFloat(discountPrice) > 0){
+            stringBuilder.append("【券后价】")
+                    .append(discountPrice)
+                    .append("元")
+                    .append("\n");
+        }
+        stringBuilder.append("【下单链接】")
+                .append(url)
+                .append("\n")
+                .append("----------------- ")
+                .append("\n")
+                .append("复制这条信息，")
+                .append(tkl)
+                .append("，到【手机淘宝】即可查看");
+        return stringBuilder.toString();
     }
 
 }

@@ -117,7 +117,7 @@ public class GoodsDetailActivity extends BaseActivity {
             mBanner.setOnBannerListener(onBannerListener);
 
             dataBean = getIntent().getSerializableExtra("dataBean");
-            if(dataBean != null){
+            if (dataBean != null) {
                 if (dataBean instanceof GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean) {
                     dataType = TYPE_GOODS_LIST;
                     GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean mapDataBean = (GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean) dataBean;
@@ -148,7 +148,7 @@ public class GoodsDetailActivity extends BaseActivity {
                         tv_recommend_reason.setVisibility(View.GONE);
                     } else {
                         SpannableString span = new SpannableString("推荐理由:" + mapDataBean.getItem_description());
-                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)),0,5,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)), 0, 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                         tv_recommend_reason.setText(span);
                     }
                 } else if (dataBean instanceof SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean) {
@@ -174,28 +174,28 @@ public class GoodsDetailActivity extends BaseActivity {
                         tv_recommend_reason.setVisibility(View.GONE);
                     } else {
                         SpannableString span = new SpannableString("推荐理由:" + mapDataBean.getItem_description());
-                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)),0,5,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_subtext_subtitle)), 0, 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                         tv_recommend_reason.setText(span);
                     }
                 }
                 //获取关联推荐的商品
-                LogUtil.i(TAG+" itemId = "+itemId);
-                if(itemId >= 0){
-                    Map<String,String> bussinessMap = new HashMap<>();
-                    bussinessMap.put("fields","num_iid,title,pict_url,reserve_price,zk_final_price,item_url,volume,nick");
-                    bussinessMap.put("num_iid",itemId+"");
-                    bussinessMap.put("count","40");
-                    bussinessMap.put("platform","2");
+                LogUtil.i(TAG + " itemId = " + itemId);
+                if (itemId >= 0) {
+                    Map<String, String> bussinessMap = new HashMap<>();
+                    bussinessMap.put("fields", "num_iid,title,pict_url,reserve_price,zk_final_price,item_url,volume,nick");
+                    bussinessMap.put("num_iid", itemId + "");
+                    bussinessMap.put("count", "40");
+                    bussinessMap.put("platform", "2");
 
-                    requestHelper.request(Constant.RELATIVE_RECOMMEND,bussinessMap,onGetRelativeGoodsListener,RelativeGoodsBean.class);
-                }else{
-                    LogUtil.e(TAG+" id < 0 ,无关联商品");
+                    requestHelper.request(Constant.RELATIVE_RECOMMEND, bussinessMap, onGetRelativeGoodsListener, RelativeGoodsBean.class);
+                } else {
+                    LogUtil.e(TAG + " id < 0 ,无关联商品");
                 }
-            }else{
-                itemId = getIntent().getLongExtra("itemId",-1);
-                if(itemId >= 0){
+            } else {
+                itemId = getIntent().getLongExtra("itemId", -1);
+                if (itemId >= 0) {
                     //TODO:调用商品详情接口
-                }else{
+                } else {
                     ToastUtil.shortShow("抱歉客官……没有找到该商品详情~\n去看看别的商品吧~");
                     tv_get_coupon.setEnabled(false);
                 }
@@ -212,16 +212,16 @@ public class GoodsDetailActivity extends BaseActivity {
 
         @Override
         public void onSuccess(RelativeGoodsBean resultBean) {
-            if(resultBean == null){
-                LogUtil.e(TAG+" get RelativeGoods : resultBean is null");
+            if (resultBean == null) {
+                LogUtil.e(TAG + " get RelativeGoods : resultBean is null");
                 return;
             }
-            if(Utils.isListEmpty(resultBean.getTbk_item_recommend_get_response().getResults().getN_tbk_item())){
-                LogUtil.e(TAG+" get RelativeGoods : dataBeanList is empty");
+            if (Utils.isListEmpty(resultBean.getTbk_item_recommend_get_response().getResults().getN_tbk_item())) {
+                LogUtil.e(TAG + " get RelativeGoods : dataBeanList is empty");
                 return;
             }
-            RelativeGoodsRecyclerAdapter adapter = new RelativeGoodsRecyclerAdapter(mContext,resultBean.getTbk_item_recommend_get_response().getResults().getN_tbk_item());
-            recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+            RelativeGoodsRecyclerAdapter adapter = new RelativeGoodsRecyclerAdapter(mContext, resultBean.getTbk_item_recommend_get_response().getResults().getN_tbk_item());
+            recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
             OffsetRecyclerDivider divider = new OffsetRecyclerDivider();
             divider.setBottom(SizeUtils.dp2px(5));
             divider.setLeft(SizeUtils.dp2px(5));
@@ -233,19 +233,19 @@ public class GoodsDetailActivity extends BaseActivity {
     private OnBannerListener onBannerListener = new OnBannerListener() {
         @Override
         public void OnBannerClick(int position) {
-            Intent intent = new Intent(mContext,PicsBrowseActivity.class);
-            intent.putExtra(PicsBrowseActivity.INDEX_KEY,position);
-            switch (dataType){
+            Intent intent = new Intent(mContext, PicsBrowseActivity.class);
+            intent.putExtra(PicsBrowseActivity.INDEX_KEY, position);
+            switch (dataType) {
                 case TYPE_GOODS_LIST:
                     List<String> imageUrlList = new ArrayList<>();
                     for (int i = 0; i < goodsListBean.getSmall_images().getString().size(); i++) {
                         imageUrlList.add(Constant.URL_HEADER + goodsListBean.getSmall_images().getString().get(i));
                         LogUtil.i(TAG + " url : " + Constant.URL_HEADER + goodsListBean.getSmall_images().getString().get(i));
                     }
-                    intent.putExtra(PicsBrowseActivity.LIST_KEY,new ArrayList<>(imageUrlList));
+                    intent.putExtra(PicsBrowseActivity.LIST_KEY, new ArrayList<>(imageUrlList));
                     break;
                 case TYPE_SEARCH_LIST:
-                    intent.putExtra(PicsBrowseActivity.LIST_KEY,new ArrayList<>(searchListBean.getSmall_images().getString()));
+                    intent.putExtra(PicsBrowseActivity.LIST_KEY, new ArrayList<>(searchListBean.getSmall_images().getString()));
                     break;
             }
             startActivity(intent);
@@ -262,16 +262,16 @@ public class GoodsDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_get_coupon,R.id.iv_share})
+    @OnClick({R.id.iv_back, R.id.tv_get_coupon, R.id.iv_share})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
             case R.id.tv_get_coupon:
-                switch (dataType){
+                switch (dataType) {
                     case TYPE_GOODS_LIST:
-                        if(goodsListBean == null){
+                        if (goodsListBean == null) {
                             break;
                         }
                         Map<String, String> params = new HashMap<>();
@@ -327,7 +327,7 @@ public class GoodsDetailActivity extends BaseActivity {
                         }, TklBean.class);
                         break;
                     case TYPE_SEARCH_LIST:
-                        if(searchListBean == null){
+                        if (searchListBean == null) {
                             break;
                         }
                         Map<String, String> searchParams = new HashMap<>();
@@ -385,7 +385,68 @@ public class GoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_share:
-//                WxApiUtils.showShareDialog();
+                switch (dataType) {
+                    case TYPE_GOODS_LIST:
+                        if (goodsListBean == null) {
+                            break;
+                        }
+                        Map<String, String> searchParams = new HashMap<>();
+//                searchParams.put("user_id",Constant.TB_USER_ID); 不确定是不是这个userid，暂时不传
+                        searchParams.put("text", goodsListBean.getTitle() + "\n" + goodsListBean.getItem_description());
+                        searchParams.put("url", Constant.URL_SAFE_HEADER + goodsListBean.getCoupon_share_url());
+                        searchParams.put("logo", goodsListBean.getPict_url());
+                        new RequestHelper<TklBean>().request(Constant.CREATE_TAO_WORDS, searchParams, new RequestHelper.OnRequestListener<TklBean>() {
+                            @Override
+                            public void onError(String msg) {
+                                ToastUtil.shortShow("淘口令获取失败，请重试~");
+                            }
+
+                            @Override
+                            public void onSuccess(TklBean resultBean) {
+//                        if (clipboardManager == null) {
+//                            clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+//                        }
+//                        ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
+//                        clipboardManager.setPrimaryClip(clipData);
+                                WxApiUtils.showShareDialog(mContext, Utils.generateShareTkl(goodsListBean.getTitle(),
+                                        goodsListBean.getCoupon_start_fee(),
+                                        String.valueOf(Utils.getDiscountPrice(goodsListBean.getCoupon_start_fee(), goodsListBean.getCoupon_amount())),
+                                        Constant.URL_SAFE_HEADER + goodsListBean.getCoupon_share_url(),
+                                        resultBean.getTbk_tpwd_create_response().getData().getModel()));
+                            }
+                        }, TklBean.class);
+                        break;
+                    case TYPE_SEARCH_LIST:
+                        if (searchListBean == null) {
+                            break;
+                        }
+                        Map<String, String> searchListParams = new HashMap<>();
+//                searchListParams.put("user_id",Constant.TB_USER_ID); 不确定是不是这个userid，暂时不传
+                        searchListParams.put("text", searchListBean.getTitle() + "\n" + searchListBean.getItem_description());
+                        searchListParams.put("url", Constant.URL_SAFE_HEADER + searchListBean.getCoupon_share_url());
+                        searchListParams.put("logo", searchListBean.getPict_url());
+                        new RequestHelper<TklBean>().request(Constant.CREATE_TAO_WORDS, searchListParams, new RequestHelper.OnRequestListener<TklBean>() {
+                            @Override
+                            public void onError(String msg) {
+                                ToastUtil.shortShow("淘口令获取失败，请重试~");
+                            }
+
+                            @Override
+                            public void onSuccess(TklBean resultBean) {
+//                        if (clipboardManager == null) {
+//                            clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+//                        }
+//                        ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
+//                        clipboardManager.setPrimaryClip(clipData);
+                                WxApiUtils.showShareDialog(mContext, Utils.generateShareTkl(searchListBean.getTitle(),
+                                        searchListBean.getCoupon_start_fee(),
+                                        String.valueOf(Utils.getDiscountPrice(searchListBean.getCoupon_start_fee(), searchListBean.getCoupon_amount())),
+                                        Constant.URL_SAFE_HEADER + searchListBean.getCoupon_share_url(),
+                                        resultBean.getTbk_tpwd_create_response().getData().getModel()));
+                            }
+                        }, TklBean.class);
+                        break;
+                }
                 break;
         }
     }

@@ -27,6 +27,7 @@ import com.android.jesse.huitao.utils.HttpUtils;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
+import com.android.jesse.huitao.view.activity.GoodsDetailActivity;
 import com.android.jesse.huitao.view.activity.SearchActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 import com.android.jesse.huitao.view.adapter.CommonFragmentAdapter;
@@ -76,6 +77,7 @@ public class RecommendFragment extends BaseFragment {
     private int size = 20;
     private CommonFragmentAdapter adapter;
     private GoodsListBean bannerBean;
+    List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> bannerDataBeanList;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
@@ -83,13 +85,13 @@ public class RecommendFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(msg.what == 0){
-                List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> dataBeanList = (List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean>)msg.obj;
-                if(!Utils.isListEmpty(dataBeanList)){
+                bannerDataBeanList = (List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean>)msg.obj;
+                if(!Utils.isListEmpty(bannerDataBeanList)){
                     List<String> imageList = new ArrayList<>();
                     List<String> titleList = new ArrayList<>();
-                    for(int i=0;i<dataBeanList.size();i++){
-                        imageList.add(Constant.URL_HEADER+dataBeanList.get(i).getPict_url());
-                        titleList.add(Utils.getBannerTitle(dataBeanList.get(i)));
+                    for(int i=0;i<bannerDataBeanList.size();i++){
+                        imageList.add(Constant.URL_HEADER+bannerDataBeanList.get(i).getPict_url());
+                        titleList.add(Utils.getBannerTitle(bannerDataBeanList.get(i)));
                     }
                     mBanner.setImages(imageList);
                     mBanner.setBannerTitles(titleList);
@@ -225,7 +227,13 @@ public class RecommendFragment extends BaseFragment {
     private OnBannerListener onBannerListener = new OnBannerListener() {
         @Override
         public void OnBannerClick(int position) {
-            //TODO:跳转商品详情页面
+            if(Utils.isListEmpty(bannerDataBeanList)){
+                return;
+            }
+            GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean dataBean = bannerDataBeanList.get(position);
+            Intent intent = new Intent(mContext,GoodsDetailActivity.class);
+            intent.putExtra("dataBean",dataBean);
+            mContext.startActivity(intent);
         }
     };
 
