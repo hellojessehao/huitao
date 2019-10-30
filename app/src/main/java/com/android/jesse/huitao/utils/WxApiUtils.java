@@ -198,7 +198,7 @@ public class WxApiUtils {
             return;
         }
         if (Utils.isNetAddress(url)) {
-            final Dialog dialog = new Dialog(context);
+            final Dialog dialog = new Dialog(context,R.style.common_dialog);
             dialog.setContentView(R.layout.share_dialog);
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
@@ -233,7 +233,7 @@ public class WxApiUtils {
                 window.setAttributes(layoutParams);
             }
         } else {
-            final Dialog dialog = new Dialog(context);
+            final Dialog dialog = new Dialog(context,R.style.common_dialog);
             dialog.setContentView(R.layout.share_dialog);
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override

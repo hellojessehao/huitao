@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.android.jesse.huitao.R;
+import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.utils.SharedPreferencesUtil;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 
 /**
@@ -22,7 +24,12 @@ public class HomeSwitchActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            startActivity(new Intent(mContext,HomePageActivity.class));
+
+            if(!SharedPreferencesUtil.getBooleanDate(Constant.IS_LOGIN)){
+                startActivity(new Intent(mContext,LoginActivity.class));
+            }else{
+                startActivity(new Intent(mContext,HomePageActivity.class));
+            }
 
             finish();
         }

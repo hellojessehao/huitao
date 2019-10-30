@@ -91,4 +91,7 @@ public class Constant {
     public static final String SERVICE_QQ = "983934995";
     public static final String SERVICE_WECHAT = "android_jesse";
     //@}
+    //APP全局变量@{
+    public static final String IS_LOGIN = "is_login";
+    //@}
 }

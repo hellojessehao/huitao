@@ -19,7 +19,7 @@
 
     <application
         android:name=".view.activity.base.MainApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_logo"
@@ -38,6 +38,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.HomePageActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".view.activity.LoginActivity"
             android:screenOrientation="portrait"
             />
         <activity android:name=".view.activity.MainActivity"

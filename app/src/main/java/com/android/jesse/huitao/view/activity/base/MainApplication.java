@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
+import com.alibaba.baichuan.android.trade.callback.AlibcTradeInitCallback;
 import com.android.jesse.huitao.utils.CrashHandler;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.SharedPreferencesUtil;
@@ -100,6 +102,18 @@ public class MainApplication extends Application {
 
         };
         mPushAgent.setMessageHandler(umengMessageHandler);
+        //初始化百川SDK
+        AlibcTradeSDK.asyncInit(this, new AlibcTradeInitCallback() {
+            @Override
+            public void onSuccess() {
+                LogUtil.d(TAG+" 百川初始化成功");
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                LogUtil.e(TAG+" 百川初始化失败 : code = "+code+",msg = "+msg);
+            }
+        });
     }
 
     private void dealCustomMessage(Map<String,String> extra){
