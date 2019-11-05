@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="top"
     android:background="@color/color_selected_tags"
     android:paddingStart="@dimen/dp_15"
@@ -19,12 +20,13 @@
         android:layout_height="@dimen/dp_45"
         android:layout_below="@id/view_statusBar">
 
-        <ImageView
+        <com.android.jesse.huitao.view.custom.ImageViewRoundRect
             android:id="@+id/iv_logo"
             android:layout_width="@dimen/dp_45"
             android:layout_height="@dimen/dp_45"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_pure_logo" />
+            android:src="@mipmap/ic_pure_logo"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

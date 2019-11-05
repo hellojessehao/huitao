@@ -25,12 +25,14 @@ import com.android.jesse.huitao.model.bean.GoodsListBean;
 import com.android.jesse.huitao.utils.GlideUtil;
 import com.android.jesse.huitao.utils.HttpUtils;
 import com.android.jesse.huitao.utils.LogUtil;
+import com.android.jesse.huitao.utils.SharedPreferencesUtil;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.GoodsDetailActivity;
 import com.android.jesse.huitao.view.activity.SearchActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 import com.android.jesse.huitao.view.adapter.CommonFragmentAdapter;
+import com.android.jesse.huitao.view.custom.ImageViewRoundRect;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.google.gson.Gson;
@@ -72,6 +74,8 @@ public class RecommendFragment extends BaseFragment {
     LinearLayout ll_content_container;
     @BindView(R.id.view_divider)
     View view_divider;
+    @BindView(R.id.iv_logo)
+    ImageViewRoundRect iv_logo;
 
     private int pager = 1;
     private int size = 20;
@@ -109,6 +113,11 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
+//        iv_logo.setType(0);
+//        GlideUtil.getInstance().loadOriImg(mContext,SharedPreferencesUtil.getStringDate(Constant.AVATAR_URL),iv_logo);
+        iv_logo.setType(1);
+        iv_logo.setRoundRadius(0);
+
         mBanner.setIndicatorGravity(BannerConfig.CENTER);
         mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         mBanner.setImageLoader(new GlideImageLoader());

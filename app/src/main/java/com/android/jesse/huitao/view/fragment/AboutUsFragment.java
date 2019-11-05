@@ -24,11 +24,6 @@ public class AboutUsFragment extends BaseFragment {
 
     private static final String TAG = AboutUsFragment.class.getSimpleName();
 
-    @BindView(R.id.tv_qq)
-    TextView tv_qq;
-    @BindView(R.id.tv_wechat)
-    TextView tv_wechat;
-
     private ClipboardManager clipboardManager;
 
     @Override
@@ -39,25 +34,12 @@ public class AboutUsFragment extends BaseFragment {
     @Override
     protected void initEventAndData() {
         clipboardManager = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
-
-        tv_qq.setText("QQ："+Constant.SERVICE_QQ);
-        tv_wechat.setText("微信："+Constant.SERVICE_WECHAT);
     }
 
-    @OnClick({R.id.tv_qq,R.id.tv_wechat,R.id.tv_share})
+    @OnClick({R.id.ll_share})
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.tv_qq:
-                ClipData qqClip = ClipData.newPlainText("serviceQQ",Constant.SERVICE_QQ);
-                clipboardManager.setPrimaryClip(qqClip);
-                ToastUtil.shortShow("官方QQ号已复制到剪切板");
-                break;
-            case R.id.tv_wechat:
-                ClipData wechatClip = ClipData.newPlainText("serviceWechat",Constant.SERVICE_WECHAT);
-                clipboardManager.setPrimaryClip(wechatClip);
-                ToastUtil.shortShow("官方微信号已复制到剪切板");
-                break;
-            case R.id.tv_share:
+            case R.id.ll_share:
                 WxApiUtils.showShareDialog(mContext,R.mipmap.publish_qrcode);
                 break;
         }
