@@ -27,10 +27,10 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btn_login})
+    @OnClick({R.id.ll_tb_login})
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.btn_login:
+            case R.id.ll_tb_login:
                 BaichuanUtils.login();
                 break;
         }

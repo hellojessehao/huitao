@@ -85,4 +85,6 @@
     <color name="color_0b0b0b">#0B0B0B</color>//设置选项文字颜色
     <color name="color_f9f9f9">#F9F9F9</color>
     <color name="color_262626">#262626</color>
+    <color name="color_selected_tags_a10">#1AFF7A05</color>//选中状态文字、标签内文字
+    <color name="color_selected_tags_a40">#66FF7A05</color>//选中状态文字、标签内文字
 </resources>

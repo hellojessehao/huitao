@@ -1,17 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_selected_tags"
-    >
+    android:background="@drawable/bg_login">
 
-    <Button
-        android:id="@+id/btn_login"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="使用淘宝账号登录"
-        android:layout_centerVertical="true"
-        />
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@drawable/bg_white_radius_16"
+        >
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="45dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_xzwk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="40sp"
+            android:text="惠省淘"
+            android:textColor="@color/color_selected_tags"
+            android:layout_below="@id/iv_logo"
+            />
+
+        <TextView
+            android:id="@+id/tv_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_below="@id/tv_xzwk"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_selected_tags"
+            android:text="点击下方登录开启省钱之旅"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_tb_login"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_orange40_radius_8"
+            android:layout_marginStart="@dimen/dp_25"
+            android:layout_marginEnd="@dimen/dp_25"
+            android:gravity="center"
+            android:layout_below="@id/tv_welcome"
+            android:layout_marginTop="70dp"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_taobao_logo"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:textSize="18sp"
+                android:textColor="@color/color_selected_tags"
+                android:text="淘宝账号登录"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
