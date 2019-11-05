@@ -1,10 +1,16 @@
 package com.android.jesse.huitao.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
+import com.ali.auth.third.core.model.Session;
 import com.alibaba.baichuan.trade.biz.login.AlibcLogin;
 import com.alibaba.baichuan.trade.biz.login.AlibcLoginCallback;
 import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.view.activity.HomePageActivity;
+import com.android.jesse.huitao.view.activity.LoginActivity;
+import com.blankj.utilcode.util.ActivityUtils;
 
 /**
  * @Description: 阿里百川SDK4.0.0.2工具类
@@ -18,7 +24,7 @@ public class BaichuanUtils {
     /**
      * 使用淘宝账号登录
      */
-    public static void login() {
+    public static void login(final Context context) {
         AlibcLogin alibcLogin = AlibcLogin.getInstance();
         alibcLogin.showLogin(new AlibcLoginCallback() {
             @Override
@@ -28,7 +34,14 @@ public class BaichuanUtils {
                 // openId：用户id
                 // userNick: 用户昵称
                 LogUtil.i(TAG+" 获取淘宝用户信息: " + AlibcLogin.getInstance().getSession());
-//                SharedPreferencesUtil.setBooleanDate(Constant.IS_LOGIN,true);
+                //填充用户信息@{
+                Session session = AlibcLogin.getInstance().getSession();
+                SharedPreferencesUtil.setStringDate(Constant.AVATAR_URL,session.avatarUrl);
+                SharedPreferencesUtil.setStringDate(Constant.OPEN_ID_TAOBAO,openId);
+                SharedPreferencesUtil.setStringDate(Constant.NICKNAME,userNick);
+                //@}
+                SharedPreferencesUtil.setBooleanDate(Constant.IS_LOGIN,true);
+                context.startActivity(new Intent(context,HomePageActivity.class));
             }
 
             @Override
@@ -42,7 +55,7 @@ public class BaichuanUtils {
     /**\
      * 登出
      */
-    public static void logout() {
+    public static void logout(final Context context) {
         AlibcLogin alibcLogin = AlibcLogin.getInstance();
         alibcLogin.logout(new AlibcLoginCallback() {
             @Override
@@ -52,6 +65,8 @@ public class BaichuanUtils {
                 // openId：用户id
                 // userNick: 用户昵称
                 SharedPreferencesUtil.setBooleanDate(Constant.IS_LOGIN,false);
+                ActivityUtils.finishOtherActivities(LoginActivity.class);
+                ActivityUtils.startActivity(LoginActivity.class);
             }
 
             @Override
@@ -61,4 +76,18 @@ public class BaichuanUtils {
         });
     }
 
+    public interface OnLoginOrOutListener{
+        void onLogin(Session session);
+        void onLogout(int loginResult);
+    }
+
+    private OnLoginOrOutListener onLoginOrOutListener;
+
+    public OnLoginOrOutListener getOnLoginOrOutListener() {
+        return onLoginOrOutListener;
+    }
+
+    public void setOnLoginOrOutListener(OnLoginOrOutListener onLoginOrOutListener) {
+        this.onLoginOrOutListener = onLoginOrOutListener;
+    }
 }

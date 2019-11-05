@@ -93,5 +93,8 @@ public class Constant {
     //@}
     //APP全局变量@{
     public static final String IS_LOGIN = "is_login";
+    public static final String NICKNAME = "user_nickname";
+    public static final String AVATAR_URL = "avatar_url";
+    public static final String OPEN_ID_TAOBAO = "open_id_taobao";
     //@}
 }
