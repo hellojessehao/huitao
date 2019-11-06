@@ -10,7 +10,9 @@ import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.WxApiUtils;
+import com.android.jesse.huitao.view.activity.BackMoneyActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
+import com.blankj.utilcode.util.ActivityUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -36,11 +38,14 @@ public class AboutUsFragment extends BaseFragment {
         clipboardManager = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
-    @OnClick({R.id.ll_share})
+    @OnClick({R.id.ll_share,R.id.ll_back_money})
     public void onClick(View v){
         switch (v.getId()){
             case R.id.ll_share:
                 WxApiUtils.showShareDialog(mContext,R.mipmap.publish_qrcode);
+                break;
+            case R.id.ll_back_money:
+                ActivityUtils.startActivity(BackMoneyActivity.class);
                 break;
         }
     }

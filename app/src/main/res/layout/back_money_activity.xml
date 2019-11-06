@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/common_white_titlebar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="返利平台全网最高返现比例"
+        android:textColor="@color/orange_80"
+        android:textSize="@dimen/sp_18"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_5"
+        android:text="(欢迎对比其他返利平台)"
+        android:textSize="12sp"
+        android:textColor="@color/color_most_shallow"
+        />
+
+    <View style="@style/v_divider_1_match_common"/>
+
+    <LinearLayout
+        android:id="@+id/ll_copy_wx"
+        style="@style/white_layout_common"
+        android:background="@drawable/bg_click_selector"
+        android:layout_marginTop="@dimen/dp_10"
+        >
+
+        <ImageView
+            style="@style/img_setting_item_common"
+            android:src="@mipmap/emptyalbum" />
+
+        <TextView
+            style="@style/txt_black_common"
+            android:text="复制客服微信号 android_jesse（推荐）" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_rightclick" />
+    </LinearLayout>
+
+    <View style="@style/v_divider_1_match_common"/>
+
+    <LinearLayout
+        android:id="@+id/ll_copy_qq"
+        style="@style/white_layout_common"
+        android:background="@drawable/bg_click_selector"
+        android:layout_marginTop="@dimen/dp_10"
+        >
+
+        <ImageView
+            style="@style/img_setting_item_common"
+            android:src="@mipmap/emptyalbum" />
+
+        <TextView
+            style="@style/txt_black_common"
+            android:text="复制客服QQ号 983934995" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_rightclick" />
+    </LinearLayout>
+
+</LinearLayout>

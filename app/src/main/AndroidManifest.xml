@@ -59,6 +59,7 @@
         <!-- pgyer -->
         <!-- 用户反馈页面 -->
         <activity android:name="com.pgyersdk.feedback.FeedbackActivity"/>
+        <activity android:name=".view.activity.BackMoneyActivity" />
 
         <provider
             android:name="com.pgyersdk.PgyerProvider"
