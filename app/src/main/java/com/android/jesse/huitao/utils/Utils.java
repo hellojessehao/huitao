@@ -378,8 +378,9 @@ public class Utils {
                     .append("元")
                     .append("\n");
         }
-        stringBuilder.append("【下单链接】")
-                .append(url)
+        stringBuilder
+                //.append("【下单链接】")
+                //.append(url)
                 .append("\n")
                 .append("----------------- ")
                 .append("\n")

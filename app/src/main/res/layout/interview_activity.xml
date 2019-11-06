@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <include layout="@layout/common_white_titlebar"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/color_selected_tags"
+        app:cardCornerRadius="@dimen/dp_8"
+        app:cardElevation="@dimen/dp_5"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_10"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="后台工程师  3年以上  1人"
+                android:textColor="@color/color_maintext_title"
+                android:textSize="@dimen/sp_14"
+                android:textIsSelectable="true"
+                android:selectAllOnFocus="true"
+                />
+
+            <View style="@style/v_divider_1_match_common"
+                android:layout_marginTop="@dimen/dp_5"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="要求：\n1.有用户量5W以上上线项目； \n2.有独立开发经验； \n3.自主解决问题能力、沟通能力、团队协作能力强； \n5.有创业想法并愿意投入业余时间到项目开发上；"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_subtext_subtitle"
+                android:textIsSelectable="true"
+                android:selectAllOnFocus="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="联系方式：android_jesse (微信) 983934995 (QQ)\n添加时请注明来意"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_subtext_subtitle"
+                android:textIsSelectable="true"
+                android:selectAllOnFocus="true"
+                />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/color_selected_tags"
+        app:cardCornerRadius="@dimen/dp_8"
+        app:cardElevation="@dimen/dp_5"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_10"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="前端开发工程师  3年以上  1人"
+                android:textColor="@color/color_maintext_title"
+                android:textSize="@dimen/sp_14"
+                android:textIsSelectable="true"
+                android:selectAllOnFocus="true"
+                />
+
+            <View style="@style/v_divider_1_match_common"
+                android:layout_marginTop="@dimen/dp_5"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="要求：\n1.有微信小程序、公众号开发经验，并有上线项目；\n3.熟练掌握前端开发技术； \n4.有独立开发经验； \n5.自主解决问题能力、沟通能力、团队协作能力强；\n6.有创业想法并愿意投入业余时间到项目开发上。"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_subtext_subtitle"
+                android:textIsSelectable="true"
+                android:selectAllOnFocus="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="联系方式：android_jesse (微信) 983934995 (QQ)\n添加时请注明来意"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_subtext_subtitle"
+                android:textIsSelectable="true"
+                android:selectAllOnFocus="true"
+                />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:text="致有兴趣的攻城狮们：\n  我们需要的是想奋斗一把，不想靠死工资度日的年轻人。但不要空想家，要愿意为此付出大量时间和精力的人。\n  “光应付工作就已经很累了，哪有时间精力搞这个”，抱有这种想法的人就别浪费彼此时间了。"
+        android:textSize="@dimen/sp_12"
+        android:textIsSelectable="true"
+        android:selectAllOnFocus="true"
+        />
+
+</LinearLayout>

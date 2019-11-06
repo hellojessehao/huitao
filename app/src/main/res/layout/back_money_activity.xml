@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
 
     <include layout="@layout/common_white_titlebar"/>
 
@@ -11,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_10"
-        android:text="返利平台全网最高返现比例"
-        android:textColor="@color/orange_80"
+        android:text="返利平台中全网最高返利"
+        android:textColor="@color/color_selected_tags"
         android:textSize="@dimen/sp_18"
         />
 
@@ -26,20 +28,36 @@
         android:textColor="@color/color_most_shallow"
         />
 
-    <View style="@style/v_divider_1_match_common"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back_money_steps"
+        android:textColor="@color/color_selected_tags"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:selectAllOnFocus="true"
+        android:textIsSelectable="true"
+        android:background="@drawable/bg_white_stroke1_radius4"
+        android:padding="@dimen/dp_5"
+        />
+
+    <View style="@style/v_divider_1_match_common"
+        android:layout_marginTop="@dimen/dp_10"
+        />
 
     <LinearLayout
         android:id="@+id/ll_copy_wx"
         style="@style/white_layout_common"
         android:background="@drawable/bg_click_selector"
-        android:layout_marginTop="@dimen/dp_10"
         >
 
         <ImageView
             style="@style/img_setting_item_common"
-            android:src="@mipmap/emptyalbum" />
+            android:src="@mipmap/ic_wechat_friends" />
 
         <TextView
+            android:id="@+id/tv_copy_wx"
             style="@style/txt_black_common"
             android:text="复制客服微信号 android_jesse（推荐）" />
 
@@ -55,12 +73,11 @@
         android:id="@+id/ll_copy_qq"
         style="@style/white_layout_common"
         android:background="@drawable/bg_click_selector"
-        android:layout_marginTop="@dimen/dp_10"
         >
 
         <ImageView
             style="@style/img_setting_item_common"
-            android:src="@mipmap/emptyalbum" />
+            android:src="@mipmap/ic_qq_logo" />
 
         <TextView
             style="@style/txt_black_common"

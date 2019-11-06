@@ -3,11 +3,16 @@ package com.android.jesse.huitao.view.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 
 import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.utils.ScreenManager;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 
@@ -25,6 +30,8 @@ public class BackMoneyActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView tv_title;
+    @BindView(R.id.tv_copy_wx)
+    TextView tv_copy_wx;
 
     private ClipboardManager clipboardManager;
 
@@ -35,8 +42,13 @@ public class BackMoneyActivity extends BaseActivity {
 
     @Override
     protected void initEventAndData() {
-        tv_title.setText("返现");
+        ScreenManager.getInstance().setDeepStatusBar(true,mContext);
 
+        tv_title.setText("返现");
+        SpannableString spannableString = new SpannableString("复制客服微信号 android_jesse（推荐）");
+        spannableString.setSpan(new ForegroundColorSpan(Color.RED),spannableString.toString().indexOf("（"),
+                spannableString.toString().length(),Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        tv_copy_wx.setText(spannableString);
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
     }
 

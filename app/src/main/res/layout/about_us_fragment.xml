@@ -74,7 +74,7 @@
 
                 <ImageView
                     style="@style/img_setting_item_common"
-                    android:src="@mipmap/emptyalbum" />
+                    android:src="@mipmap/ic_back_money" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_coupons"
+                android:id="@+id/ll_orders"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -95,7 +95,7 @@
 
                 <ImageView
                     style="@style/img_setting_item_common"
-                    android:src="@mipmap/emptyalbum" />
+                    android:src="@mipmap/ic_orders" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View style="@style/v_divider_5_match_common"/>
+        <View style="@style/v_divider_1_match_common"/>
 
         <LinearLayout
             android:id="@+id/ll_company"
@@ -117,7 +117,7 @@
 
             <ImageView
                 style="@style/img_setting_item_common"
-                android:src="@mipmap/emptyalbum" />
+                android:src="@mipmap/ic_multiperson_chatroom" />
 
             <TextView
                 style="@style/txt_black_common"
@@ -131,7 +131,7 @@
 
         <View
             android:id="@+id/view_company_divider"
-            style="@style/v_divider_5_match_common"/>
+            style="@style/v_divider_1_common"/>
 
         <LinearLayout
             android:id="@+id/ll_share"
@@ -140,7 +140,7 @@
 
             <ImageView
                 style="@style/img_setting_item_common"
-                android:src="@mipmap/emptyalbum" />
+                android:src="@mipmap/ic_share_orange" />
 
             <TextView
                 style="@style/txt_black_common"
@@ -155,13 +155,13 @@
         <View style="@style/v_divider_1_common"/>
 
         <LinearLayout
-            android:id="@+id/ll_draft"
+            android:id="@+id/ll_interview"
             style="@style/white_layout_common"
             android:background="@drawable/bg_click_selector">
 
             <ImageView
                 style="@style/img_setting_item_common"
-                android:src="@mipmap/emptyalbum" />
+                android:src="@mipmap/ic_interview" />
 
             <TextView
                 style="@style/txt_black_common"
@@ -184,7 +184,7 @@
 
             <ImageView
                 style="@style/img_setting_item_common"
-                android:src="@mipmap/emptyalbum" />
+                android:src="@mipmap/ic_fallback" />
 
             <TextView
                 style="@style/txt_black_common"
@@ -199,27 +199,24 @@
         <View style="@style/v_divider_1_common"/>
 
         <LinearLayout
-            android:id="@+id/ll_account"
+            android:id="@+id/ll_logout"
             style="@style/white_layout_common"
             android:background="@drawable/bg_click_selector"
-            android:visibility="gone"
             >
 
             <ImageView
                 style="@style/img_setting_item_common"
-                android:src="@mipmap/emptyalbum" />
+                android:src="@mipmap/ic_logout" />
 
             <TextView
                 style="@style/txt_black_common"
-                android:text="账户" />
+                android:text="退出登录" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_rightclick" />
         </LinearLayout>
-
-        <View style="@style/v_divider_1_common"/>
 
         <LinearLayout
             android:id="@+id/ll_profession_verify"
@@ -241,8 +238,6 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_rightclick" />
         </LinearLayout>
-
-        <View style="@style/v_divider_1_common"/>
 
         <LinearLayout
             android:id="@+id/ll_message"
@@ -288,7 +283,6 @@
                 android:src="@mipmap/ic_rightclick" />
         </LinearLayout>
 
-        <View style="@style/v_divider_1_common"/>
 
         <LinearLayout
             android:id="@+id/ll_settings"

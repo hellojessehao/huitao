@@ -3,6 +3,7 @@ package com.android.jesse.huitao.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ali.auth.third.core.model.Session;
 import com.alibaba.baichuan.trade.biz.login.AlibcLogin;
@@ -65,13 +66,14 @@ public class BaichuanUtils {
                 // openId：用户id
                 // userNick: 用户昵称
                 SharedPreferencesUtil.setBooleanDate(Constant.IS_LOGIN,false);
-                ActivityUtils.finishOtherActivities(LoginActivity.class);
                 ActivityUtils.startActivity(LoginActivity.class);
+                ActivityUtils.finishOtherActivities(LoginActivity.class);
+                Toast.makeText(context, "已退出登录", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int code, String msg) {
-                // code：错误码  msg： 错误信息
+                ToastUtil.shortShow("退出登录失败，请重试~");
             }
         });
     }

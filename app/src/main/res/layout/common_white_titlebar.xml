@@ -41,4 +41,6 @@
 
     </RelativeLayout>
 
+    <View style="@style/v_divider_1_match_common"/>
+
 </LinearLayout>
