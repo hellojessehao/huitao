@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.jesse.huitao.utils.ScreenManager;
-import com.umeng.message.PushAgent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * @Description: activity基类
@@ -27,7 +27,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         mUnBinder = ButterKnife.bind(this);
-        PushAgent.getInstance(mContext).onAppStart();//友盟统计
         mContext = this;
         ScreenManager.getInstance().setStatusBar(true,mContext);//设置沉浸式状态栏
         initEventAndData();
@@ -36,6 +35,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initEventAndData();
 
     protected abstract int getLayout();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
 
     @Override
     protected void onDestroy() {

@@ -77,7 +77,7 @@ public class AboutUsFragment extends BaseFragment {
                 }
                 break;
             case R.id.ll_orders:
-                ToastUtil.shortShow("暂未开发");
+                ToastUtil.shortShow("暂未开放");
                 break;
             case R.id.ll_interview:
                 ActivityUtils.startActivity(InterviewActivity.class);
