@@ -1,11 +1,14 @@
 package com.android.jesse.huitao.view.receiver;
 
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.view.activity.HomePageActivity;
 
@@ -25,6 +28,8 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class MyReceiver extends BroadcastReceiver {
 	private static final String TAG = MyReceiver.class.getSimpleName();
+
+	private ClipboardManager clipboardManager;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -49,13 +54,22 @@ public class MyReceiver extends BroadcastReceiver {
 			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 				LogUtil.d(TAG+ "[MyReceiver] 用户点击打开了通知");
 
-				//打开自定义的Activity
-				Intent i = new Intent(context, HomePageActivity.class);
-				i.putExtras(bundle);
-				//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-				context.startActivity(i);
-
+				if(bundle.containsKey(JPushInterface.EXTRA_EXTRA)){
+					String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+					JSONObject jsonObject = new JSONObject(extra);
+					String tkl = jsonObject.getString("tkl");
+					LogUtil.d(TAG+" tkl = "+tkl);
+					if(clipboardManager == null){
+						clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+					}
+					clipboardManager.setPrimaryClip(ClipData.newPlainText("tkl",tkl));
+					//打开自定义的Activity
+					Intent i = new Intent(context, HomePageActivity.class);
+					i.putExtra(Constant.FROM_NOTIFICATION,true);
+					//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+					context.startActivity(i);
+				}
 			} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
 				LogUtil.d(TAG+ "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
 				//在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..

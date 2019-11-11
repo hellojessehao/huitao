@@ -2,6 +2,13 @@ package com.android.jesse.huitao.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -13,7 +20,12 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.android.jesse.huitao.R;
+import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.utils.BaichuanUtils;
+import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.LogUtil;
+import com.android.jesse.huitao.utils.SharedPreferencesUtil;
+import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 import com.android.jesse.huitao.view.custom.TabItemView;
@@ -46,7 +58,7 @@ public class HomePageActivity extends BaseActivity {
     private final int RECOMMEND_TAB_INDEX = 0;
     private final int SEARCH_COUPONS_TAB_INDEX = 1;
     private final int ABOUT_US_TAB_INDEX = 2;
-    private int currentSelectIndex = SEARCH_COUPONS_TAB_INDEX;//默认选中项目序号
+    private int currentSelectIndex = RECOMMEND_TAB_INDEX;//默认选中项目序号
     private FragmentManager fragmentManager;
 
     private RecommendFragment recommendFragment;
@@ -56,15 +68,104 @@ public class HomePageActivity extends BaseActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private final int REQUEST_PERMISSIONS = 110;
+    private Dialog gotoTaobaoDialog;
+    private Dialog guideDialog;
 
     @Override
     protected int getLayout() {
         return R.layout.home_page_activity;
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null && intent.getBooleanExtra(Constant.FROM_NOTIFICATION, false)) {
+            gotoTaobaoDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "提示", "淘口令复制成功，是否现在进入淘宝？", "现在就去", "稍等",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            switch (v.getId()) {
+                                case R.id.tv_positive:
+                                    PackageInfo packageInfo;
+                                    try {
+                                        packageInfo = mContext.getPackageManager().getPackageInfo(
+                                                "com.taobao.taobao", 0);
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        packageInfo = null;
+                                        e.printStackTrace();
+                                    }
+                                    if (packageInfo == null) {
+                                        ToastUtil.shortShow("请客官先安装淘宝~");
+                                    } else {
+                                        Intent intent = new Intent();
+                                        //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
+                                        intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
+                                        mContext.startActivity(intent);
+                                        ToastUtil.shortShow("正在前往淘宝。。。");
+                                    }
+                                    gotoTaobaoDialog.dismiss();
+                                    break;
+                                case R.id.tv_negative:
+                                    gotoTaobaoDialog.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+        }
+    }
+
     @TargetApi(23)
     @Override
     protected void initEventAndData() {
+        if(!SharedPreferencesUtil.getBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE)){
+            guideDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "新手指南", "找到想要购买的商品，点击“领券”后跳转淘宝，即可使用优惠券买下它了~", "知道了", "待会儿问客服", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferencesUtil.setBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE,true);
+                    switch (v.getId()){
+                        case R.id.tv_positive:
+                            guideDialog.dismiss();
+                            break;
+                        case R.id.tv_negative:
+                            guideDialog.dismiss();
+                            break;
+                    }
+                }
+            });
+        }
+        if (getIntent() != null && getIntent().getBooleanExtra(Constant.FROM_NOTIFICATION, false)) {
+            gotoTaobaoDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "提示", "淘口令复制成功，是否现在进入淘宝？", "现在就去", "稍等",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            switch (v.getId()) {
+                                case R.id.tv_positive:
+                                    PackageInfo packageInfo;
+                                    try {
+                                        packageInfo = mContext.getPackageManager().getPackageInfo(
+                                                "com.taobao.taobao", 0);
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        packageInfo = null;
+                                        e.printStackTrace();
+                                    }
+                                    if (packageInfo == null) {
+                                        ToastUtil.shortShow("请客官先安装淘宝~");
+                                    } else {
+                                        Intent intent = new Intent();
+                                        //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
+                                        intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
+                                        mContext.startActivity(intent);
+                                        ToastUtil.shortShow("正在前往淘宝。。。");
+                                    }
+                                    gotoTaobaoDialog.dismiss();
+                                    break;
+                                case R.id.tv_negative:
+                                    gotoTaobaoDialog.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+        }
         //初始化变量
         fragmentManager = getSupportFragmentManager();
         tabList = new ArrayList<>();
@@ -72,24 +173,24 @@ public class HomePageActivity extends BaseActivity {
         tabList.add(search_tab);
         tabList.add(aboutus_tab);
         //设置初始fragment
-        if(searchCouponsFragment == null){
-            searchCouponsFragment = new SearchCouponsFragment();
+        if (recommendFragment == null) {
+            recommendFragment = new RecommendFragment();
         }
-        fragmentManager.beginTransaction().replace(R.id.fl_content, searchCouponsFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fl_content, recommendFragment).commit();
         //设置监听
         recommend_tab.setOnClickListener(onTabClickListener);
         search_tab.setOnClickListener(onTabClickListener);
         aboutus_tab.setOnClickListener(onTabClickListener);
-        if(Utils.isHigherThanM()){
-            if(!checkPermissions()){
-                requestPermissions(permissions,REQUEST_PERMISSIONS);
+        if (Utils.isHigherThanM()) {
+            if (!checkPermissions()) {
+                requestPermissions(permissions, REQUEST_PERMISSIONS);
             }
         }
     }
 
-    private boolean checkPermissions(){
-        for(String permission : permissions){
-            if(ActivityCompat.checkSelfPermission(mContext,permission) != PackageManager.PERMISSION_GRANTED){
+    private boolean checkPermissions() {
+        for (String permission : permissions) {
+            if (ActivityCompat.checkSelfPermission(mContext, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }
@@ -104,7 +205,7 @@ public class HomePageActivity extends BaseActivity {
                     return;
                 }
                 currentSelectIndex = ((TabItemView) v).getIndex();
-                switch (((TabItemView) v).getIndex()){
+                switch (((TabItemView) v).getIndex()) {
                     case RECOMMEND_TAB_INDEX:
                         recommend_tab.setSelect(!recommend_tab.isSelect());
                         //切换fragment
@@ -152,25 +253,25 @@ public class HomePageActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_PERMISSIONS){
-            for(int i=0;i<permissions.length;i++){
-                if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
-                    requestPermissions(permissions,REQUEST_PERMISSIONS);
+        if (requestCode == REQUEST_PERMISSIONS) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(permissions, REQUEST_PERMISSIONS);
                 }
             }
         }
     }
 
-    private long lastMills,currentMills;
+    private long lastMills, currentMills;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             currentMills = System.currentTimeMillis();
-            if(lastMills > 0 && currentMills - lastMills <= 1500){
+            if (lastMills > 0 && currentMills - lastMills <= 1500) {
                 finish();
                 return true;
-            }else{
+            } else {
                 Toast.makeText(mContext, "再按一次退出应用", Toast.LENGTH_SHORT).show();
                 lastMills = currentMills;
                 new Handler().postDelayed(new Runnable() {
@@ -178,7 +279,7 @@ public class HomePageActivity extends BaseActivity {
                     public void run() {
                         lastMills = 0;
                     }
-                },1500);
+                }, 1500);
                 return true;
             }
         }

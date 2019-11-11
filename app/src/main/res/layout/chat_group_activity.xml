@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/common_white_titlebar"/>
+
+    <LinearLayout
+        android:id="@+id/ll_join_wx"
+        style="@style/white_layout_common"
+        android:background="@drawable/bg_click_selector"
+        >
+
+        <ImageView
+            style="@style/img_setting_item_common"
+            android:src="@mipmap/ic_wechat_friends" />
+
+        <TextView
+            style="@style/txt_black_common"
+            android:text="进入微信福利群" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_rightclick" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_company_divider"
+        style="@style/v_divider_1_common"/>
+
+    <LinearLayout
+        android:id="@+id/ll_join_qq"
+        style="@style/white_layout_common"
+        android:background="@drawable/bg_click_selector">
+
+        <ImageView
+            style="@style/img_setting_item_common"
+            android:src="@mipmap/ic_qq_logo" />
+
+        <TextView
+            style="@style/txt_black_common"
+            android:text="进入QQ福利群" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_rightclick" />
+    </LinearLayout>
+
+</LinearLayout>

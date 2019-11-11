@@ -132,7 +132,7 @@
         />
 
     <LinearLayout
-        android:id="@+id/ll_get_coupon"
+        android:id="@+id/ll_go_taobao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -142,24 +142,12 @@
         android:layout_marginEnd="@dimen/dp_5"
         >
         <TextView
+            android:id="@+id/tv_go_taobao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="券"
-            android:paddingStart="@dimen/dp_2"
-            android:paddingEnd="@dimen/dp_2"
-            android:paddingTop="@dimen/dp_3"
-            android:paddingBottom="@dimen/dp_3"
-            android:background="@drawable/bg_red_radiusleft88"
+            android:text="去淘宝"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_10"
-            />
-        <TextView
-            android:id="@+id/tv_coupon_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="500元"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_10"
+            android:textSize="@dimen/sp_12"
             android:padding="@dimen/dp_3"
             android:background="@drawable/bg_red_radius4"
             />

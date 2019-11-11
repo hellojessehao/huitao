@@ -1,5 +1,6 @@
 package com.android.jesse.huitao.view.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -7,12 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +30,7 @@ import com.android.jesse.huitao.model.bean.GoodsListBean;
 import com.android.jesse.huitao.model.bean.RelativeGoodsBean;
 import com.android.jesse.huitao.model.bean.SearchListBean;
 import com.android.jesse.huitao.model.bean.TklBean;
+import com.android.jesse.huitao.utils.BaichuanUtils;
 import com.android.jesse.huitao.utils.DateUtils;
 import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.GlideUtil;
@@ -143,7 +148,17 @@ public class GoodsDetailActivity extends BaseActivity {
                     String endTime = DateUtils.getFormatedDate(Long.parseLong(mapDataBean.getCoupon_end_time()), "yyyy-MM-dd");
                     tv_valide_date_start.setText(startTime);
                     tv_valide_date_end.setText(endTime);
-                    tv_seller_name.setText(mapDataBean.getShop_title());
+
+                    SpannableStringBuilder goShopString = new SpannableStringBuilder(mapDataBean.getShop_title()+"【去店里看看】");
+                    int start,end;
+                    start = goShopString.toString().indexOf("【");
+                    end = goShopString.length();
+                    RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.7f);
+                    ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.RED);
+                    goShopString.setSpan(relativeSizeSpan,start,end,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    goShopString.setSpan(colorSpan,start,end,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    tv_seller_name.setText(goShopString);
+
                     if (TextUtils.isEmpty(mapDataBean.getItem_description())) {
                         tv_recommend_reason.setVisibility(View.GONE);
                     } else {
@@ -156,9 +171,20 @@ public class GoodsDetailActivity extends BaseActivity {
                     SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean mapDataBean = (SearchListBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean) dataBean;
                     searchListBean = mapDataBean;
                     itemId = mapDataBean.getItem_id();
+                    if(mapDataBean.getSmall_images() != null){
+                        mBanner.setImages(mapDataBean.getSmall_images().getString());
+                        mBanner.start();
+                    }
 
-                    mBanner.setImages(mapDataBean.getSmall_images().getString());
-                    mBanner.start();
+                    SpannableStringBuilder goShopString = new SpannableStringBuilder(mapDataBean.getShop_title()+"【去店里看看】");
+                    int start,end;
+                    start = goShopString.toString().indexOf("【");
+                    end = goShopString.length();
+                    RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.7f);
+                    ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.RED);
+                    goShopString.setSpan(relativeSizeSpan,start,end,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    goShopString.setSpan(colorSpan,start,end,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    tv_seller_name.setText(goShopString);
 
                     tv_title.setText(mapDataBean.getTitle());
                     tv_discount_price.setText("￥" + Utils.getDiscountPrice(mapDataBean.getCoupon_start_fee(), mapDataBean.getCoupon_amount()));
@@ -169,7 +195,6 @@ public class GoodsDetailActivity extends BaseActivity {
                     tv_coupon_value.setText("￥" + mapDataBean.getCoupon_amount());
                     tv_valide_date_start.setText(mapDataBean.getCoupon_start_time());
                     tv_valide_date_end.setText(mapDataBean.getCoupon_end_time());
-                    tv_seller_name.setText(mapDataBean.getShop_title());
                     if (TextUtils.isEmpty(mapDataBean.getItem_description())) {
                         tv_recommend_reason.setVisibility(View.GONE);
                     } else {
@@ -262,9 +287,22 @@ public class GoodsDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_get_coupon, R.id.iv_share})
+    @OnClick({R.id.iv_back, R.id.tv_get_coupon, R.id.iv_share,R.id.tv_seller_name})
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_seller_name:
+                switch (dataType){
+                    case TYPE_GOODS_LIST:
+                        ToastUtil.shortShow("跳转中……");
+                        BaichuanUtils.gotoShopPage((Activity) mContext,Long.toString(goodsListBean.getSeller_id()));
+                        break;
+                    case TYPE_SEARCH_LIST:
+                        ToastUtil.shortShow("跳转中……");
+                        BaichuanUtils.gotoShopPage((Activity) mContext,Long.toString(searchListBean.getSeller_id()));
+                        break;
+                }
+
+                break;
             case R.id.iv_back:
                 finish();
                 break;
@@ -286,12 +324,7 @@ public class GoodsDetailActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onSuccess(TklBean resultBean) {
-                                if (clipboardManager == null) {
-                                    clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                                }
-                                ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
-                                clipboardManager.setPrimaryClip(clipData);
+                            public void onSuccess(final TklBean resultBean) {
                                 useCouponDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "优惠券复制成功", "打开淘宝即可使用优惠券，是否现在进入淘宝？", "现在就去", "稍等",
                                         new View.OnClickListener() {
                                             @Override
@@ -309,15 +342,22 @@ public class GoodsDetailActivity extends BaseActivity {
                                                         if (packageInfo == null) {
                                                             ToastUtil.shortShow("请客官先安装淘宝~");
                                                         } else {
-                                                            Intent intent = new Intent();
-                                                            //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
-                                                            intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
-                                                            mContext.startActivity(intent);
-                                                            ToastUtil.shortShow("正在前往淘宝。。。");
+//                                                            Intent intent = new Intent();
+//                                                            //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
+//                                                            intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
+//                                                            mContext.startActivity(intent);
+//                                                            ToastUtil.shortShow("正在前往淘宝。。。");
+                                                            ToastUtil.shortShow("跳转中……");
+                                                            BaichuanUtils.gotoDetailPage((Activity)mContext,Long.toString(goodsListBean.getItem_id()));
                                                         }
                                                         useCouponDialog.dismiss();
                                                         break;
                                                     case R.id.tv_negative:
+                                                        if (clipboardManager == null) {
+                                                            clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                                                        }
+                                                        ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
+                                                        clipboardManager.setPrimaryClip(clipData);
                                                         useCouponDialog.dismiss();
                                                         break;
                                                 }
@@ -342,12 +382,7 @@ public class GoodsDetailActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onSuccess(TklBean resultBean) {
-                                if (clipboardManager == null) {
-                                    clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                                }
-                                ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
-                                clipboardManager.setPrimaryClip(clipData);
+                            public void onSuccess(final TklBean resultBean) {
                                 useCouponDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "优惠券复制成功", "打开淘宝即可使用优惠券，是否现在进入淘宝？", "现在就去", "稍等",
                                         new View.OnClickListener() {
                                             @Override
@@ -365,15 +400,22 @@ public class GoodsDetailActivity extends BaseActivity {
                                                         if (packageInfo == null) {
                                                             ToastUtil.shortShow("请客官先安装淘宝~");
                                                         } else {
-                                                            Intent intent = new Intent();
-                                                            //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
-                                                            intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
-                                                            mContext.startActivity(intent);
-                                                            ToastUtil.shortShow("正在前往淘宝。。。");
+//                                                            Intent intent = new Intent();
+//                                                            //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
+//                                                            intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
+//                                                            mContext.startActivity(intent);
+//                                                            ToastUtil.shortShow("正在前往淘宝。。。");
+                                                            ToastUtil.shortShow("跳转中……");
+                                                            BaichuanUtils.gotoDetailPage((Activity)mContext,Long.toString(searchListBean.getItem_id()));
                                                         }
                                                         useCouponDialog.dismiss();
                                                         break;
                                                     case R.id.tv_negative:
+                                                        if (clipboardManager == null) {
+                                                            clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                                                        }
+                                                        ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
+                                                        clipboardManager.setPrimaryClip(clipData);
                                                         useCouponDialog.dismiss();
                                                         break;
                                                 }

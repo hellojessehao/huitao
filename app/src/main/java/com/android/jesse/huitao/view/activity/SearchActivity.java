@@ -1,10 +1,12 @@
 package com.android.jesse.huitao.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.jesse.huitao.R;
+import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.utils.CacheHelper;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.ScreenManager;
@@ -285,6 +288,9 @@ public class SearchActivity extends BaseActivity {
                         et_search.setText(content.trim());
                         et_search.setSelection(content.trim().length());
                         inputMethodManager.hideSoftInputFromWindow(et_search.getWindowToken(),0);
+                        taobaoFragment.setHasLoaded(false);
+                        tmallFragment.setHasLoaded(false);
+                        overSeaFragment.setHasLoaded(false);
                         if(searchType == TYPE_TAOBAO){
                             taobaoFragment.search(content.trim());
                         }else if(searchType == TYPE_TMALL){
@@ -318,6 +324,9 @@ public class SearchActivity extends BaseActivity {
                 rl_search_history_container.setVisibility(View.GONE);
                 String content = et_search.getText().toString().trim();
                 inputMethodManager.hideSoftInputFromWindow(et_search.getWindowToken(),0);
+                taobaoFragment.setHasLoaded(false);
+                tmallFragment.setHasLoaded(false);
+                overSeaFragment.setHasLoaded(false);
                 if (searchType == TYPE_TAOBAO) {
                     taobaoFragment.search(content);
                 } else if (searchType == TYPE_TMALL) {
@@ -432,6 +441,9 @@ public class SearchActivity extends BaseActivity {
     private void refreshData(TabLayout.Tab tab){
         if(tab == null){
             tab = tab_layout.getTabAt(tab_layout.getSelectedTabPosition());
+            taobaoFragment.setHasLoaded(false);
+            tmallFragment.setHasLoaded(false);
+            overSeaFragment.setHasLoaded(false);
         }
         if(tab == null){
             return;

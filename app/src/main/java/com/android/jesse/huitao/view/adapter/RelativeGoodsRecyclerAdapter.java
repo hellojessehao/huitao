@@ -1,5 +1,6 @@
 package com.android.jesse.huitao.view.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -23,6 +24,7 @@ import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.model.bean.RelativeGoodsBean;
 import com.android.jesse.huitao.model.bean.SearchListBean;
 import com.android.jesse.huitao.model.bean.TklBean;
+import com.android.jesse.huitao.utils.BaichuanUtils;
 import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.GlideUtil;
 import com.android.jesse.huitao.utils.LogUtil;
@@ -52,6 +54,7 @@ public class RelativeGoodsRecyclerAdapter extends RecyclerView.Adapter<RelativeG
     private Context mContext;
     private ClipboardManager clipboardManager;
     private Dialog useCouponDialog;
+    private Dialog goTaobaoDialog;
 
     public RelativeGoodsRecyclerAdapter(Context mContext, List<RelativeGoodsBean.TbkItemRecommendGetResponseBean.ResultsBean.NTbkItemBean> dataBeanList) {
         this.dataBeanList = dataBeanList;
@@ -76,71 +79,89 @@ public class RelativeGoodsRecyclerAdapter extends RecyclerView.Adapter<RelativeG
         viewHolder.tv_selled_count.setText(dataBean.getVolume() + "人已买");
 
         viewHolder.tv_discount_price.setText("￥"+dataBean.getZk_final_price());
-        viewHolder.tv_coupon_value.setText(Utils.getCouponAmount(dataBean.getReserve_price(),dataBean.getZk_final_price()) + "元");
+//        viewHolder.tv_coupon_value.setText(Utils.getCouponAmount(dataBean.getReserve_price(),dataBean.getZk_final_price()) + "元");
 
         viewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,GoodsDetailActivity.class);
-                intent.putExtra("itemId",dataBean.getNum_iid());
-                mContext.startActivity(intent);
+//                Intent intent = new Intent(mContext,GoodsDetailActivity.class);
+//                intent.putExtra("itemId",dataBean.getNum_iid());
+//                mContext.startActivity(intent);
+                goTaobaoDialog = DialogUtil.showSimpleHintDialogForCommonVersion(mContext, "客官，是否去淘宝查看该商品？", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (v.getId()){
+                            case R.id.tv_positive:
+                                ToastUtil.shortShow("跳转中……");
+                                BaichuanUtils.gotoDetailPage((Activity) mContext,Long.toString(dataBean.getNum_iid()));
+                                goTaobaoDialog.dismiss();
+                                break;
+                            case R.id.tv_negative:
+                                goTaobaoDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
             }
         });
-        viewHolder.ll_get_coupon.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ll_go_taobao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, String> params = new HashMap<>();
-//                params.put("user_id",Constant.TB_USER_ID); 不确定是不是这个userid，暂时不传
-                params.put("text", dataBean.getTitle() + "\n" + dataBean.getTitle());
-                params.put("url", dataBean.getItem_url().replace("http","https"));
-                LogUtil.d(TAG+" url : "+dataBean.getItem_url().replace("http","https"));
-                params.put("logo", dataBean.getPict_url());
-                new RequestHelper<TklBean>().request(Constant.CREATE_TAO_WORDS, params, new RequestHelper.OnRequestListener<TklBean>() {
-                    @Override
-                    public void onError(String msg) {
-                        ToastUtil.shortShow("淘口令获取失败，请重试~");
-                    }
+                ToastUtil.shortShow("跳转中……");
+                BaichuanUtils.gotoDetailPage((Activity) mContext,Long.toString(dataBean.getNum_iid()));
 
-                    @Override
-                    public void onSuccess(TklBean resultBean) {
-                        if (clipboardManager == null) {
-                            clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        }
-                        ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
-                        clipboardManager.setPrimaryClip(clipData);
-                        useCouponDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "优惠券复制成功", "打开淘宝即可使用优惠券，是否现在进入淘宝？", "现在就去", "稍等",
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        switch (v.getId()) {
-                                            case R.id.tv_positive:
-                                                PackageInfo packageInfo;
-                                                try {
-                                                    packageInfo = mContext.getPackageManager().getPackageInfo(
-                                                            "com.taobao.taobao", 0);
-                                                } catch (PackageManager.NameNotFoundException e) {
-                                                    packageInfo = null;
-                                                    e.printStackTrace();
-                                                }
-                                                if (packageInfo == null) {
-                                                    ToastUtil.shortShow("请客官先安装淘宝~");
-                                                } else {
-                                                    Intent intent = new Intent();
-                                                    //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
-                                                    intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
-                                                    mContext.startActivity(intent);
-                                                    ToastUtil.shortShow("正在前往淘宝。。。");
-                                                }
-                                                useCouponDialog.dismiss();
-                                                break;
-                                            case R.id.tv_negative:
-                                                useCouponDialog.dismiss();
-                                                break;
-                                        }
-                                    }
-                                });
-                    }
-                }, TklBean.class);
+//                Map<String, String> params = new HashMap<>();
+////                params.put("user_id",Constant.TB_USER_ID); 不确定是不是这个userid，暂时不传
+//                params.put("text", dataBean.getTitle() + "\n" + dataBean.getTitle());
+//                params.put("url", dataBean.getItem_url().replace("http","https"));
+//                LogUtil.d(TAG+" url : "+dataBean.getItem_url().replace("http","https"));
+//                params.put("logo", dataBean.getPict_url());
+//                new RequestHelper<TklBean>().request(Constant.CREATE_TAO_WORDS, params, new RequestHelper.OnRequestListener<TklBean>() {
+//                    @Override
+//                    public void onError(String msg) {
+//                        ToastUtil.shortShow("淘口令获取失败，请重试~");
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(TklBean resultBean) {
+//                        if (clipboardManager == null) {
+//                            clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+//                        }
+//                        ClipData clipData = ClipData.newPlainText("coupons", resultBean.getTbk_tpwd_create_response().getData().getModel());
+//                        clipboardManager.setPrimaryClip(clipData);
+//                        useCouponDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "优惠券复制成功", "打开淘宝即可使用优惠券，是否现在进入淘宝？", "现在就去", "稍等",
+//                                new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        switch (v.getId()) {
+//                                            case R.id.tv_positive:
+//                                                PackageInfo packageInfo;
+//                                                try {
+//                                                    packageInfo = mContext.getPackageManager().getPackageInfo(
+//                                                            "com.taobao.taobao", 0);
+//                                                } catch (PackageManager.NameNotFoundException e) {
+//                                                    packageInfo = null;
+//                                                    e.printStackTrace();
+//                                                }
+//                                                if (packageInfo == null) {
+//                                                    ToastUtil.shortShow("请客官先安装淘宝~");
+//                                                } else {
+//                                                    Intent intent = new Intent();
+//                                                    //com.taobao.taobao/com.taobao.tao.TBMainActivity 淘宝首页地址
+//                                                    intent.setClassName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
+//                                                    mContext.startActivity(intent);
+//                                                    ToastUtil.shortShow("正在前往淘宝。。。");
+//                                                }
+//                                                useCouponDialog.dismiss();
+//                                                break;
+//                                            case R.id.tv_negative:
+//                                                useCouponDialog.dismiss();
+//                                                break;
+//                                        }
+//                                    }
+//                                });
+//                    }
+//                }, TklBean.class);
             }
         });
     }
@@ -163,12 +184,10 @@ public class RelativeGoodsRecyclerAdapter extends RecyclerView.Adapter<RelativeG
         TextView tv_selled_count;
         @BindView(R.id.tv_discount_price)
         TextView tv_discount_price;
-        @BindView(R.id.tv_coupon_value)
-        TextView tv_coupon_value;
-        @BindView(R.id.ll_get_coupon)
-        LinearLayout ll_get_coupon;
         @BindView(R.id.rl_container)
         RelativeLayout rl_container;
+        @BindView(R.id.ll_go_taobao)
+        LinearLayout ll_go_taobao;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

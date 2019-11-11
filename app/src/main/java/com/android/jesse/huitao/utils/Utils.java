@@ -207,7 +207,13 @@ public class Utils {
     //获取banner标题
     public static String getBannerTitle(GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean dataBean) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(dataBean.getTitle().substring(0, 12));
+        if(!TextUtils.isEmpty(dataBean.getTitle())){
+            if(dataBean.getTitle().length() > 12){
+                stringBuilder.append(dataBean.getTitle().substring(0, 12));
+            }else{
+                stringBuilder.append(dataBean.getTitle());
+            }
+        }
         stringBuilder.append("(满");
         String startPrice = dataBean.getCoupon_start_fee();
         stringBuilder.append(startPrice.substring(0,startPrice.indexOf(".")));

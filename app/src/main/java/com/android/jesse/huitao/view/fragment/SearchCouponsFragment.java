@@ -35,8 +35,6 @@ public class SearchCouponsFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
-        //检查版本更新
-        UpgradeUtils.checkUpgrade(mContext);
     }
 
     @OnClick({R.id.btn_search,R.id.et_search})

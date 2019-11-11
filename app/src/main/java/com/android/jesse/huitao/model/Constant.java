@@ -86,6 +86,7 @@ public class Constant {
     public static final String MD5 = "md5";
     //SPKEY@{
     public static final String SPKEY_SEARCH_HISTORY = "spkey_search_history";
+    public static final String SPKEY_NOT_FIRST_INTO_HOMEPAGE = "spkey_first_into_homepage";
     //@}
     //客服账号@{
     public static final String SERVICE_QQ = "983934995";
@@ -96,5 +97,9 @@ public class Constant {
     public static final String NICKNAME = "user_nickname";
     public static final String AVATAR_URL = "avatar_url";
     public static final String OPEN_ID_TAOBAO = "open_id_taobao";
+    public static final String ACTION_RECOMMEND_LOADMORE = "action_recommend_loadmore";
+    public static final String ACTION_RECCOMEND_REFRESH = "action_reccomend_refresh";
+    public static final String ACTION_RECOMMEND_LOADDATA_COMPLETE = "action_recommend_loaddata_complete";
+    public static final String FROM_NOTIFICATION = "from_notification";
     //@}
 }

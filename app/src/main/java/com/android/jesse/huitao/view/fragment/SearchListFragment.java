@@ -1,6 +1,11 @@
 package com.android.jesse.huitao.view.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -55,6 +60,7 @@ public class SearchListFragment extends BaseFragment {
     private Map<String,String> bussinessMap;
     private String lastContent;
     private String content;
+    private boolean hasLoaded = false;//是否已经加载过了
 
     @Override
     protected int getLayoutId() {
@@ -109,12 +115,13 @@ public class SearchListFragment extends BaseFragment {
     }
 
     public void search(String content){
-        if (TextUtils.isEmpty(content)) {
+        if (TextUtils.isEmpty(content) || hasLoaded) {
             return;
         }
         this.content = content;
         srl_refresh.autoRefresh();
         lastContent = content;
+        hasLoaded = true;
     }
 
     private RequestHelper.OnRequestListener<SearchListBean> onRequestListener = new RequestHelper.OnRequestListener<SearchListBean>() {
@@ -136,4 +143,11 @@ public class SearchListFragment extends BaseFragment {
         }
     };
 
+    public boolean isHasLoaded() {
+        return hasLoaded;
+    }
+
+    public void setHasLoaded(boolean hasLoaded) {
+        this.hasLoaded = hasLoaded;
+    }
 }

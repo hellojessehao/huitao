@@ -15,7 +15,7 @@
         android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srlEnableLoadMore="false">
+        app:srlEnableLoadMore="true">
 
         <LinearLayout
             android:id="@+id/ll_content_container"

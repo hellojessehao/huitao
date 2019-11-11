@@ -1,8 +1,13 @@
 package com.android.jesse.huitao.view.fragment;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,6 +20,7 @@ import com.android.jesse.huitao.model.bean.GoodsListBean;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.RequestHelper;
 import com.android.jesse.huitao.utils.ToastUtil;
+import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 import com.android.jesse.huitao.view.adapter.TypesFragmentAdapter;
 import com.android.jesse.huitao.view.custom.RecycleViewDivider;
@@ -48,6 +54,9 @@ public class TypesFragment extends BaseFragment {
     private int material_id = Constant.HIGH_COMMISSION_MATERIAL_ID_ZONGHE;
     private TypesFragmentAdapter adapter;
     private List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> dataBeanList;
+    private int pageSize = 20;
+    private int page = 1;
+    private int position;
 
     public static TypesFragment getInstance(int type){
         TypesFragment typesFragment = new TypesFragment();
@@ -84,13 +93,12 @@ public class TypesFragment extends BaseFragment {
                 tv_no_data.setVisibility(View.GONE);
                 dataBeanList.addAll(resultBean.getTbk_dg_optimus_material_response().getResult_list().getMap_data());
                 adapter.notifyDataSetChanged();
+                //发送广播给主页面，提示数据加载完成
+                Intent intent = new Intent(Constant.ACTION_RECOMMEND_LOADDATA_COMPLETE);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
             }
         };
         bussinessMap = new HashMap<>();
-        bussinessMap.put("adzone_id",Constant.ADZONE_ID);
-        bussinessMap.put("page_no",1+"");
-        bussinessMap.put("page_size",100+"");
-        bussinessMap.put("platform",2+"");
 
         getData();
     }
@@ -166,10 +174,48 @@ public class TypesFragment extends BaseFragment {
                 material_id = Constant.HIGH_COMMISSION_MATERIAL_ID_YUNDONG;
                 break;
         }
+        bussinessMap.put("adzone_id",Constant.ADZONE_ID);
+        bussinessMap.put("page_no",page+"");
+        bussinessMap.put("page_size",pageSize+"");
+        bussinessMap.put("platform",2+"");
         bussinessMap.put("material_id",material_id+"");
         LogUtil.i(TAG+" material_id = "+material_id);
         requestHelper.request(Constant.GOODS_LIST_GET,bussinessMap,onRequestListener,GoodsListBean.class);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_RECCOMEND_REFRESH);
+        intentFilter.addAction(Constant.ACTION_RECOMMEND_LOADMORE);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(refreshLoadmoreReceiver,intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(refreshLoadmoreReceiver);
+    }
+
+    private BroadcastReceiver refreshLoadmoreReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //只加载当前显示的fragment
+            int position = intent.getIntExtra("currentPosition",0);
+            if(position != type){
+                return;
+            }
+            if(intent.getAction().equals(Constant.ACTION_RECCOMEND_REFRESH)){
+                page = 1;
+                dataBeanList.clear();
+                getData();
+            }else if(intent.getAction().equals(Constant.ACTION_RECOMMEND_LOADMORE)){
+                page++;
+                getData();
+            }
+        }
+    };
 
     public int getType() {
         return type;

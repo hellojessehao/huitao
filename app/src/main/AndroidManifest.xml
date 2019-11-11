@@ -49,7 +49,14 @@
         </activity>
         <activity android:name=".view.activity.HomePageActivity"
             android:screenOrientation="portrait"
-            />
+            android:launchMode="singleTask"
+            >
+            <intent-filter>
+                <data
+                    android:host="back"
+                    android:scheme="huitao"></data>
+            </intent-filter>
+        </activity>
         <activity android:name=".view.activity.LoginActivity"
             android:screenOrientation="portrait"
             />
@@ -71,6 +78,8 @@
         <activity android:name="com.pgyersdk.feedback.FeedbackActivity"/>
         <activity android:name=".view.activity.BackMoneyActivity" />
         <activity android:name=".view.activity.InterviewActivity" />
+        <activity android:name=".view.activity.ChatGroupActivity" />
+        <activity android:name=".view.activity.ActivitiesActivity" />
 
         <provider
             android:name="com.pgyersdk.PgyerProvider"

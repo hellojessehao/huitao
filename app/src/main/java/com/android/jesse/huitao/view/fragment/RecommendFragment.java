@@ -1,14 +1,17 @@
 package com.android.jesse.huitao.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,12 +30,14 @@ import com.android.jesse.huitao.utils.HttpUtils;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.SharedPreferencesUtil;
 import com.android.jesse.huitao.utils.ToastUtil;
+import com.android.jesse.huitao.utils.UpgradeUtils;
 import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.GoodsDetailActivity;
 import com.android.jesse.huitao.view.activity.SearchActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 import com.android.jesse.huitao.view.adapter.CommonFragmentAdapter;
 import com.android.jesse.huitao.view.custom.ImageViewRoundRect;
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.google.gson.Gson;
@@ -113,6 +118,8 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
+        //检查版本更新
+        UpgradeUtils.checkUpgrade(mContext);
 //        iv_logo.setType(0);
 //        GlideUtil.getInstance().loadOriImg(mContext,SharedPreferencesUtil.getStringDate(Constant.AVATAR_URL),iv_logo);
         iv_logo.setType(1);
@@ -123,10 +130,22 @@ public class RecommendFragment extends BaseFragment {
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setOnBannerListener(onBannerListener);
 
-        srl_refresh.setOnRefreshListener(new OnRefreshListener() {
+        srl_refresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                Intent intent = new Intent();
+                intent.setAction(Constant.ACTION_RECOMMEND_LOADMORE);
+                intent.putExtra("currentPosition",view_pager.getCurrentItem());
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+            }
+
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 getBannerData();
+                Intent intent = new Intent();
+                intent.setAction(Constant.ACTION_RECCOMEND_REFRESH);
+                intent.putExtra("currentPosition",view_pager.getCurrentItem());
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
             }
         });
         srl_refresh.autoRefresh();
@@ -141,7 +160,6 @@ public class RecommendFragment extends BaseFragment {
             typesFragment.setOnRecyclerScrollListener(onRecyclerScrollListener);
             fragments.add(typesFragment);
         }
-        view_pager.setOffscreenPageLimit(tabStrArr.length);
         adapter = new CommonFragmentAdapter(fragments,getChildFragmentManager());
         view_pager.setAdapter(adapter);
         tab_layout.setupWithViewPager(view_pager);
@@ -260,9 +278,33 @@ public class RecommendFragment extends BaseFragment {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.view_search:
-                startActivity(new Intent(mContext,SearchActivity.class));
+                ActivityUtils.startActivity(SearchActivity.class);
                 break;
         }
+    }
+
+    private BroadcastReceiver loadDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(Constant.ACTION_RECOMMEND_LOADDATA_COMPLETE)){
+                Utils.resetRefreshViewState(srl_refresh,true);
+            }
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter(Constant.ACTION_RECOMMEND_LOADDATA_COMPLETE);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(loadDataReceiver,intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(loadDataReceiver);
     }
 
     @Override
