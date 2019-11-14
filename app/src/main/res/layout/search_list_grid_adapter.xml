@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_container"
     android:layout_width="match_parent"
-    android:layout_height="280dp"
+    android:layout_height="300dp"
     android:padding="0.5dp"
     android:background="@drawable/bg_white_stroke_black1_radius4">
 
@@ -117,7 +117,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/dp_5"
         android:background="@drawable/bg_red_radius4"
-        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_marginBottom="23dp"
         />
 
     <TextView
@@ -131,15 +131,45 @@
         android:layout_toEndOf="@id/tv_discount_price_text"
         />
 
+    <TextView
+        android:id="@+id/tv_back_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(5.5%)"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:textSize="@dimen/sp_10"
+        android:textColor="@color/red"
+        android:layout_marginBottom="@dimen/dp_2"
+        android:padding="@dimen/dp_3"
+        />
+
+    <TextView
+        android:id="@+id/tv_back_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="返500元"
+        android:textColor="@color/red"
+        android:textSize="@dimen/sp_10"
+        android:drawableLeft="@mipmap/ic_money_bag"
+        android:gravity="center"
+        android:background="@color/white"
+        android:paddingStart="@dimen/dp_2"
+        android:paddingEnd="@dimen/dp_2"
+        android:drawablePadding="@dimen/dp_2"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/tv_back_rate"
+        android:padding="@dimen/dp_3"
+        />
+
     <LinearLayout
         android:id="@+id/ll_get_coupon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/dp_3"
         android:layout_marginEnd="@dimen/dp_5"
+        android:layout_above="@id/tv_back_money"
         >
         <TextView
             android:layout_width="wrap_content"

@@ -78,6 +78,9 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
 
         viewHolder.tv_discount_price.setText("￥"+Utils.getDiscountPrice(dataBean.getCoupon_start_fee(),dataBean.getCoupon_amount()));
         viewHolder.tv_coupon_value.setText(dataBean.getCoupon_amount() + "元");
+        viewHolder.tv_back_money.setText(Utils.getBackMoneyString(dataBean.getCoupon_start_fee(),dataBean.getCoupon_amount(),dataBean.getCommission_rate()));
+        viewHolder.tv_back_rate.setText("("+Utils.saveOnePositionAfterDot(Float.parseFloat(dataBean.getCommission_rate())*0.01f*Constant.BACK_MONEY_RATE)+"%)");
+        LogUtil.d(TAG+" couponStartFee = "+dataBean.getCoupon_start_fee()+",couponAmount = "+dataBean.getCoupon_amount()+",CommissionRate = "+dataBean.getCommission_rate());
 
         viewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,10 +174,14 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
         LinearLayout ll_get_coupon;
         @BindView(R.id.rl_container)
         RelativeLayout rl_container;
+        @BindView(R.id.tv_back_money)
+        TextView tv_back_money;
+        @BindView(R.id.tv_back_rate)
+        TextView tv_back_rate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,SizeUtils.dp2px(280));
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,SizeUtils.dp2px(300));
             itemView.setLayoutParams(layoutParams);
         }
     }

@@ -18,6 +18,10 @@ public class Constant {
     public static final String SHOP_SEARCH = "taobao.tbk.shop.get";//根据关键词搜索店铺
     public static final String GOODS_DETAIL_GET = "taobao.tbk.item.info.get";//淘宝客-公用-淘宝客商品详情查询(简版)
     public static final String RELATIVE_RECOMMEND = "taobao.tbk.item.recommend.get";//淘宝客-公用-商品关联推荐
+
+    //喵有券：
+    public static final String BASE_URL_MIAOYQ = "https://api.open.21ds.cn/";
+    public static final String HIGH_MONEY_TRANSLATE_FROM_TKL = "apiv2/getitemgyurlbytpwd?";//淘口令高佣转链接口（淘口令版）
     //@}
 
     //@第三方平台参数{
@@ -28,6 +32,9 @@ public class Constant {
     public static final String WECHAT_APP_ID = "wxe427ebd5fa3dadd7";
     public static final String UMENG_APP_KEY = "5db25ceb3fc1951b4e0006b0";
     public static final String UMENG_MESSAGE_SECRET = "6c7542b5e95e5daabe16aa0584b34f0e";
+    public static final String USER_NAME_TAOBAO = "tb218303_99";//在喵有券平台授权后的淘宝用户名
+    public static final String PID_TAOBAO = "mm_480300196_767750207_109339400190";//推广位ID（必须是授权淘宝号下的推广位）
+    public static final String APKEY_MIAOYQ = "15025093-8d67-e26d-353b-0c9e2e7329b1";//喵有券平台APKEY
     //@}
 
     //淘客相关参数@{
@@ -101,5 +108,6 @@ public class Constant {
     public static final String ACTION_RECCOMEND_REFRESH = "action_reccomend_refresh";
     public static final String ACTION_RECOMMEND_LOADDATA_COMPLETE = "action_recommend_loaddata_complete";
     public static final String FROM_NOTIFICATION = "from_notification";
+    public static final float BACK_MONEY_RATE = 0.7f;//返现比例
     //@}
 }

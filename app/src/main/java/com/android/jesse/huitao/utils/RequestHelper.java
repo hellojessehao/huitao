@@ -29,6 +29,84 @@ public class RequestHelper<E> {
         new Thread(new RequestRunnable<E>(requestUrl,bussinessParams,onRequestListener,aClass)).start();
     }
 
+    public void request(String baseUrl,String apiAddress,Map<String,String> params,OnRequestListener<E> onRequestListener,Class aClass){
+        new Thread(new CommonRequestRunnable<E>(params,baseUrl+apiAddress,onRequestListener,aClass)).start();
+    }
+
+    /**
+     * 通用请求类
+     */
+    public class CommonRequestRunnable<E> implements Runnable{
+
+        private Map<String,String> bussinessMap;
+        private String requestUrl;
+        private Class aClass;
+
+        public CommonRequestRunnable(Map<String, String> bussinessMap, String requestUrl,OnRequestListener<E> onRequestListener,Class aClass) {
+            this.bussinessMap = bussinessMap;
+            this.requestUrl = requestUrl;
+            this.onRequestListener = onRequestListener;
+            this.aClass = aClass;
+        }
+
+        @Override
+        public void run() {
+            if(bussinessMap == null){
+                LogUtil.e(TAG+" RequestRunnable : bussinessMap is null");
+                return;
+            }
+            try{
+                String result = HttpUtils.callApi(new URL(requestUrl),bussinessMap);
+                LogUtil.i(TAG+" "+result);
+                mHandler.sendMessage(mHandler.obtainMessage(0,result));
+            }catch (MalformedURLException mue){
+                mue.printStackTrace();
+                LogUtil.e(TAG+" RequestRunnable error : "+mue.toString());
+                if(onRequestListener != null){
+                    onRequestListener.onError("occur MalformedURLException");
+                }
+            }catch (IOException ioe){
+                ioe.printStackTrace();
+                LogUtil.e(TAG+" RequestRunnable error : "+ioe.toString());
+                if(onRequestListener != null){
+                    onRequestListener.onError("occur IOException");
+                }
+            }
+        }
+
+        @SuppressLint("HandlerLeak")
+        private Handler mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if(msg.what == 0){
+                    try {
+                        String result = (String) msg.obj;
+                        onRequestListener.onSuccess((E)(new Gson().fromJson(result,aClass)));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        LogUtil.e(TAG+" json parse error : "+e.toString());
+                        onRequestListener.onError("json parse error");
+                    }
+                }
+            }
+        };
+
+        private OnRequestListener<E> onRequestListener;
+
+        public OnRequestListener<E> getOnRequestListener() {
+            return onRequestListener;
+        }
+
+        public void setOnRequestListener(OnRequestListener<E> onRequestListener) {
+            this.onRequestListener = onRequestListener;
+        }
+
+    }
+
+    /**
+     * 淘宝API专用请求类
+     */
     public class RequestRunnable<E> implements Runnable{
 
         private Map<String,String> bussinessMap;

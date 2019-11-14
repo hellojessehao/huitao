@@ -396,4 +396,40 @@ public class Utils {
         return stringBuilder.toString();
     }
 
+    /**
+     * 获取返现描述 ： 返500元
+     */
+    public static String getBackMoneyString(String startFee,int couponAmount,String commissionRate){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("返");
+        stringBuilder.append(saveOnePositionAfterDot(Utils.getDiscountPrice(startFee,couponAmount)*Float.parseFloat(commissionRate)*Constant.BACK_MONEY_RATE*0.01f));
+        stringBuilder.append("元");
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 获取返现描述 ： 返500元
+     */
+    public static String getBackMoneyString(String startFee,String couponAmount,String commissionRate){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("返");
+        stringBuilder.append(saveOnePositionAfterDot(Utils.getDiscountPrice(startFee,couponAmount)*Float.parseFloat(commissionRate)*0.01f*Constant.BACK_MONEY_RATE*0.01f));
+        stringBuilder.append("元");
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 获取返现金额 ： 500
+     */
+    public static String getBackMoneyValueString(String startFee,String couponAmount,String commissionRate){
+        return saveOnePositionAfterDot(Utils.getDiscountPrice(startFee,couponAmount)*Float.parseFloat(commissionRate)*Constant.BACK_MONEY_RATE*0.01f);
+    }
+
+    /**
+     * 获取返现金额 ： 500
+     */
+    public static String getBackMoneyValueString(String startFee,int couponAmount,String commissionRate){
+        return saveOnePositionAfterDot(Utils.getDiscountPrice(startFee,couponAmount)*Float.parseFloat(commissionRate)*Constant.BACK_MONEY_RATE*0.01f);
+    }
+
 }

@@ -93,6 +93,10 @@ public class GoodsDetailActivity extends BaseActivity {
     RecyclerView recyclerView;
     @BindView(R.id.tv_no_data)
     TextView tv_no_data;
+    @BindView(R.id.tv_back_money)
+    TextView tv_back_money;
+    @BindView(R.id.tv_back_rate)
+    TextView tv_back_rate;
 
     private Object dataBean;
     private final int TYPE_GOODS_LIST = 0;
@@ -137,8 +141,11 @@ public class GoodsDetailActivity extends BaseActivity {
                     mBanner.setImages(imageUrlList);
                     mBanner.start();
 
+                    tv_back_money.setText(Utils.getBackMoneyString(mapDataBean.getCoupon_start_fee(),mapDataBean.getCoupon_amount(),mapDataBean.getCommission_rate()));
+                    tv_back_rate.setText("("+Utils.saveOnePositionAfterDot(Float.parseFloat(mapDataBean.getCommission_rate())*Constant.BACK_MONEY_RATE)+"%)");
                     tv_title.setText(mapDataBean.getTitle());
                     tv_discount_price.setText("￥" + Utils.getDiscountPrice(mapDataBean.getCoupon_start_fee(), mapDataBean.getCoupon_amount()));
+
                     SpannableString spannableString = new SpannableString("原价:￥" + mapDataBean.getCoupon_start_fee());
                     spannableString.setSpan(new StrikethroughSpan(), 0, tv_ori_price_text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     tv_ori_price_text.setText(spannableString);
@@ -186,6 +193,8 @@ public class GoodsDetailActivity extends BaseActivity {
                     goShopString.setSpan(colorSpan,start,end,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     tv_seller_name.setText(goShopString);
 
+                    tv_back_money.setText(Utils.getBackMoneyString(mapDataBean.getCoupon_start_fee(),mapDataBean.getCoupon_amount(),mapDataBean.getCommission_rate()));
+                    tv_back_rate.setText("("+Utils.saveOnePositionAfterDot(Float.parseFloat(mapDataBean.getCommission_rate())*0.01f*Constant.BACK_MONEY_RATE)+"%)");
                     tv_title.setText(mapDataBean.getTitle());
                     tv_discount_price.setText("￥" + Utils.getDiscountPrice(mapDataBean.getCoupon_start_fee(), mapDataBean.getCoupon_amount()));
                     SpannableString spannableString = new SpannableString("原价:￥" + mapDataBean.getCoupon_start_fee());

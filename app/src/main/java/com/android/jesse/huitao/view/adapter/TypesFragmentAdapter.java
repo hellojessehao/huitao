@@ -137,7 +137,7 @@ public class TypesFragmentAdapter extends RecyclerView.Adapter<TypesFragmentAdap
                 }, TklBean.class);
             }
         });
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ScreenUtils.getScreenWidth(), SizeUtils.dp2px(130));
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ScreenUtils.getScreenWidth(), SizeUtils.dp2px(150));
         viewHolder.rl_container.setLayoutParams(layoutParams);
         GlideUtil.getInstance().loadOriImg(mContext, Constant.URL_HEADER + dataBean.getPict_url(), viewHolder.iv_main_pic);
         viewHolder.tv_title.setText(dataBean.getTitle());
@@ -145,6 +145,8 @@ public class TypesFragmentAdapter extends RecyclerView.Adapter<TypesFragmentAdap
         viewHolder.tv_selled_count.setText(dataBean.getVolume() + "件");
         viewHolder.tv_discount_price.setText(Utils.getDiscountPrice(dataBean.getCoupon_start_fee(),dataBean.getCoupon_amount()) + "");
         viewHolder.tv_coupon_value.setText(dataBean.getCoupon_amount() + "元");
+        viewHolder.tv_back_money.setText(Utils.getBackMoneyString(dataBean.getCoupon_start_fee(),dataBean.getCoupon_amount(),dataBean.getCommission_rate()));
+        viewHolder.tv_back_rate.setText("("+Utils.saveOnePositionAfterDot(Float.parseFloat(dataBean.getCommission_rate())*Constant.BACK_MONEY_RATE)+"%)");
     }
 
     @Override
@@ -169,7 +171,10 @@ public class TypesFragmentAdapter extends RecyclerView.Adapter<TypesFragmentAdap
         LinearLayout ll_get_coupon;
         @BindView(R.id.tv_coupon_value)
         TextView tv_coupon_value;
-
+        @BindView(R.id.tv_back_money)
+        TextView tv_back_money;
+        @BindView(R.id.tv_back_rate)
+        TextView tv_back_rate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
