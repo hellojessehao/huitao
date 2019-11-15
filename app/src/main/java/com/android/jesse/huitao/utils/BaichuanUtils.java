@@ -194,9 +194,9 @@ AlibcTrade.openByUrl(FeatureActivity.this, "", url, null,
 //                (如果不传默认将不展示小把手；如果想展示小把手，可以自己传入自定义的scheme，
 //                        或者传入百川提供的默认scheme："alisdk://")
         AlibcTaokeParams taokeParams = new AlibcTaokeParams("","","");
-        taokeParams.setAdzoneid("109339400190");
+        taokeParams.setAdzoneid(Constant.ADZONE_ID);
         Map<String,String> extraParams = new HashMap<>();
-        extraParams.put("taokeAppkey", "27821806");
+        extraParams.put("taokeAppkey", Constant.APPKEY_TAOBAO);
         taokeParams.extraParams = extraParams;
         //自定义参数
         Map<String, String> trackParams = new HashMap<>();
@@ -238,9 +238,9 @@ AlibcTrade.openByUrl(FeatureActivity.this, "", url, null,
 //                (如果不传默认将不展示小把手；如果想展示小把手，可以自己传入自定义的scheme，
 //                        或者传入百川提供的默认scheme："alisdk://")
         AlibcTaokeParams taokeParams = new AlibcTaokeParams("","","");
-        taokeParams.setAdzoneid("109339400190");
+        taokeParams.setAdzoneid(Constant.ADZONE_ID);
         Map<String,String> extraParams = new HashMap<>();
-        extraParams.put("taokeAppkey", "27821806");
+        extraParams.put("taokeAppkey", Constant.APPKEY_TAOBAO);
         extraParams.put("sellerId",shopId);
         taokeParams.extraParams = extraParams;
         //自定义参数

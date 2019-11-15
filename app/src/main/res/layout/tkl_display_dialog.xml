@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_white_radius_16"
+    >
+
+    <ImageView
+        android:id="@+id/iv_pict"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/emptyalbum" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:text="男士外套春秋冬季2019年新款韩版潮流百搭工装夹克潮牌ins厚衣服"
+        android:textColor="@color/color_maintext_title"
+        android:textSize="@dimen/sp_14" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_discount_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="券后价：￥89"
+            android:textColor="@color/red"
+            android:textSize="@dimen/sp_16" />
+
+        <TextView
+            android:id="@+id/tv_ori_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="原价：￥100"
+            android:textColor="@color/color_most_shallow"
+            android:textSize="@dimen/sp_12" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_5"
+        >
+
+        <TextView
+            android:id="@+id/tv_back_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@id/tv_back_rate"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/ic_money_bag"
+            android:drawablePadding="@dimen/dp_2"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_2"
+            android:paddingEnd="@dimen/dp_2"
+            android:text="返500元"
+            android:textColor="@color/red"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_back_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="(5.5%)"
+            android:textColor="@color/red"
+            android:textSize="@dimen/sp_12" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/dp_20"
+        android:paddingBottom="@dimen/dp_10"
+        >
+
+        <Button
+            android:id="@+id/btn_goto_use"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="去使用"
+            android:background="@drawable/bg_red_radius45"
+            android:textColor="@color/white"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            />
+
+        <Button
+            android:id="@+id/btn_only_copy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="复制口令"
+            android:background="@drawable/bg_white_strokered1_radius45"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:textColor="@color/red"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="稍后再说"
+        android:textSize="@dimen/sp_12"
+        android:textColor="@color/color_most_shallow"
+        android:padding="@dimen/dp_10"
+        />
+
+</LinearLayout>

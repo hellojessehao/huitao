@@ -24,6 +24,11 @@ public class Constant {
     public static final String HIGH_MONEY_TRANSLATE_FROM_TKL = "apiv2/getitemgyurlbytpwd?";//淘口令高佣转链接口（淘口令版）
     //@}
 
+    //订单侠@{
+    public static final String BASE_URL_DINGDX = "http://api.tbk.dingdanxia.com/";
+    public static final String ALL_TKL_CONVERT_HIGH_MONEY_API = "tbk/wn_convert";//万能高佣转链接口
+    //@}
+
     //@第三方平台参数{
     public static final String APPKEY_TAOBAO = "27821806";
     public static final String APPSECRET_TAOBAO = "154972c8b8e369d1232e7a5acfd74584";
@@ -35,6 +40,7 @@ public class Constant {
     public static final String USER_NAME_TAOBAO = "tb218303_99";//在喵有券平台授权后的淘宝用户名
     public static final String PID_TAOBAO = "mm_480300196_767750207_109339400190";//推广位ID（必须是授权淘宝号下的推广位）
     public static final String APKEY_MIAOYQ = "15025093-8d67-e26d-353b-0c9e2e7329b1";//喵有券平台APKEY
+    public static final String APIKEY_DINGDX = "GIzds8rtUV3gJJiHsSKgXAg5j7DKCF5t";//订单侠APIkey
     //@}
 
     //淘客相关参数@{
@@ -109,5 +115,10 @@ public class Constant {
     public static final String ACTION_RECOMMEND_LOADDATA_COMPLETE = "action_recommend_loaddata_complete";
     public static final String FROM_NOTIFICATION = "from_notification";
     public static final float BACK_MONEY_RATE = 0.7f;//返现比例
+    public static final String SPKEY_APP_FOREGROUND = "spkey_app_foreground";//保存应用是否在前台的缓存变量
+    public static final String ACTION_FOREGROUND_STATE_CHANGED = "ACTION_FOREGROUND_STATE_CHANGED";//APP前后台状态改变时发送该Action的广播
+    public static final String KEY_IS_FOREGROUND = "key_is_foreground";
+    public static final String KEY_IS_SEARCH_CLIPBOARD = "key_is_search_clipboard";//是否搜索剪切板内容
+    public static final String KEY_IS_SET_SEARCH_HOMEPAGE = "key_is_set_search_homepage";//是否将查券页面设置为首页
     //@}
 }

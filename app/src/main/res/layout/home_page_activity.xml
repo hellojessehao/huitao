@@ -43,7 +43,6 @@
             app:imgHeight="24dp"
             app:tabName="推荐"
             app:tabIndex="0"
-            app:defaultSelected="true"
             />
 
         <com.android.jesse.huitao.view.custom.TabItemView

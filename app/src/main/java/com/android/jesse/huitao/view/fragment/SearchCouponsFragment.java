@@ -1,17 +1,24 @@
 package com.android.jesse.huitao.view.fragment;
 
 import android.content.Intent;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.model.bean.AllConvertTklBean;
 import com.android.jesse.huitao.model.bean.HighMoneyTranslateBean;
 import com.android.jesse.huitao.utils.ApkInfoUtils;
+import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.HttpUtils;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.RequestHelper;
+import com.android.jesse.huitao.utils.SharedPreferencesUtil;
 import com.android.jesse.huitao.utils.ToastUtil;
 import com.android.jesse.huitao.utils.UpgradeUtils;
 import com.android.jesse.huitao.view.activity.SearchActivity;
@@ -35,6 +42,10 @@ public class SearchCouponsFragment extends BaseFragment {
 
     @BindView(R.id.et_search)
     EditText et_search;
+    @BindView(R.id.switch_set_homepage)
+    Switch switch_set_homepage;
+    @BindView(R.id.switch_search_clipboard)
+    Switch switch_search_clipboard;
 
     private RequestHelper requestHelper;
 
@@ -47,6 +58,10 @@ public class SearchCouponsFragment extends BaseFragment {
     protected void initEventAndData() {
         requestHelper = new RequestHelper();
 
+        switch_set_homepage.setChecked(SharedPreferencesUtil.getBooleanDate(Constant.KEY_IS_SET_SEARCH_HOMEPAGE));
+        switch_search_clipboard.setChecked(SharedPreferencesUtil.getBooleanDate(Constant.KEY_IS_SEARCH_CLIPBOARD));
+        switch_set_homepage.setOnCheckedChangeListener(onCheckedChangeListener);
+        switch_search_clipboard.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 
     @OnClick({R.id.btn_search,R.id.et_search})
@@ -56,29 +71,67 @@ public class SearchCouponsFragment extends BaseFragment {
                 if(et_search.getText() != null &&
                         !TextUtils.isEmpty(et_search.getText().toString()) &&
                         !TextUtils.isEmpty(et_search.getText().toString().trim())){
+                    DialogUtil.showWaitDialog(mContext,"玩命加载中……");
                     Map<String,String> params = new HashMap<>();
-                    params.put("apkey",Constant.APKEY_MIAOYQ);
-                    params.put("tpwdcode",et_search.getText().toString());
-                    params.put("pid",Constant.PID_TAOBAO);
-                    params.put("tbname",Constant.USER_NAME_TAOBAO);
-                    params.put("tpwd","1");//生成淘口令
-                    params.put("extsearch","1");//淘宝官方查不到券时去第三方平台查
-                    params.put("hasiteminfo","1");//输出商品信息
-                    requestHelper.request(Constant.BASE_URL_MIAOYQ,Constant.HIGH_MONEY_TRANSLATE_FROM_TKL,params,onRequestListener,HighMoneyTranslateBean.class);
+                    params.put("apikey",Constant.APIKEY_DINGDX);
+                    params.put("content",et_search.getText().toString());
+                    params.put("tpwd","true");
+                    params.put("itemInfo","true");
+                    requestHelper.request(Constant.BASE_URL_DINGDX,Constant.ALL_TKL_CONVERT_HIGH_MONEY_API,params,onRequestListener,AllConvertTklBean.class);
                 }
                 break;
         }
     }
 
-    private RequestHelper.OnRequestListener<HighMoneyTranslateBean> onRequestListener = new RequestHelper.OnRequestListener<HighMoneyTranslateBean>() {
+    private Switch.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            switch (buttonView.getId()){
+                case R.id.switch_set_homepage:
+                    if(isChecked){
+                        SharedPreferencesUtil.setBooleanDate(Constant.KEY_IS_SET_SEARCH_HOMEPAGE,true);
+                        LogUtil.d(TAG+" KEY_IS_SET_SEARCH_HOMEPAGE : true ");
+                    }else{
+                        SharedPreferencesUtil.setBooleanDate(Constant.KEY_IS_SET_SEARCH_HOMEPAGE,false);
+                        LogUtil.d(TAG+" KEY_IS_SET_SEARCH_HOMEPAGE : false ");
+                    }
+                    break;
+                case R.id.switch_search_clipboard:
+                    if(isChecked){
+                        SharedPreferencesUtil.setBooleanDate(Constant.KEY_IS_SEARCH_CLIPBOARD,true);
+                        LogUtil.d(TAG+" KEY_IS_SEARCH_CLIPBOARD : true ");
+                    }else{
+                        SharedPreferencesUtil.setBooleanDate(Constant.KEY_IS_SEARCH_CLIPBOARD,false);
+                        LogUtil.d(TAG+" KEY_IS_SEARCH_CLIPBOARD : false ");
+                    }
+                    break;
+            }
+        }
+    };
+
+    private RequestHelper.OnRequestListener<AllConvertTklBean> onRequestListener = new RequestHelper.OnRequestListener<AllConvertTklBean>() {
         @Override
         public void onError(String msg) {
-            LogUtil.d(TAG+" request failed : "+msg);
+            LogUtil.e(TAG+" msg : "+msg);
+            DialogUtil.dismissWaitDialog();
+            try{
+                Looper.loop();
+                ToastUtil.shortShow("啊噢~没有找到优惠券~");
+                Looper.loop();
+            }catch (Exception e){
+                e.printStackTrace();
+                ToastUtil.shortShow("啊噢~没有找到优惠券~");
+            }
         }
 
         @Override
-        public void onSuccess(HighMoneyTranslateBean resultBean) {
-            LogUtil.d(TAG+" request success");
+        public void onSuccess(AllConvertTklBean resultBean) {
+            DialogUtil.dismissWaitDialog();
+            if(resultBean.getCode() != 200){
+                ToastUtil.show(resultBean.getMsg());
+                return;
+            }
+            DialogUtil.showTklDisplayDialog(mContext,resultBean);
         }
     };
 

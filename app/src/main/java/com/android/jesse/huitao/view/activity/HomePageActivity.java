@@ -26,6 +26,7 @@ import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.SharedPreferencesUtil;
 import com.android.jesse.huitao.utils.ToastUtil;
+import com.android.jesse.huitao.utils.UpgradeUtils;
 import com.android.jesse.huitao.utils.Utils;
 import com.android.jesse.huitao.view.activity.base.BaseActivity;
 import com.android.jesse.huitao.view.custom.TabItemView;
@@ -117,6 +118,9 @@ public class HomePageActivity extends BaseActivity {
     @TargetApi(23)
     @Override
     protected void initEventAndData() {
+        //检查版本更新
+        UpgradeUtils.checkUpgrade(mContext);
+
         if(!SharedPreferencesUtil.getBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE)){
             guideDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "新手指南", "找到想要购买的商品，点击“领券”后跳转淘宝，即可使用优惠券买下它了~", "知道了", "待会儿问客服", new View.OnClickListener() {
                 @Override
@@ -173,10 +177,21 @@ public class HomePageActivity extends BaseActivity {
         tabList.add(search_tab);
         tabList.add(aboutus_tab);
         //设置初始fragment
-        if (recommendFragment == null) {
-            recommendFragment = new RecommendFragment();
+        if(SharedPreferencesUtil.getBooleanDate(Constant.KEY_IS_SET_SEARCH_HOMEPAGE)){
+            search_tab.setSelect(true);
+            currentSelectIndex = SEARCH_COUPONS_TAB_INDEX;
+            if (searchCouponsFragment == null) {
+                searchCouponsFragment = new SearchCouponsFragment();
+            }
+            fragmentManager.beginTransaction().replace(R.id.fl_content, searchCouponsFragment).commit();
+        }else{
+            recommend_tab.setSelect(true);
+            currentSelectIndex = RECOMMEND_TAB_INDEX;
+            if (recommendFragment == null) {
+                recommendFragment = new RecommendFragment();
+            }
+            fragmentManager.beginTransaction().replace(R.id.fl_content, recommendFragment).commit();
         }
-        fragmentManager.beginTransaction().replace(R.id.fl_content, recommendFragment).commit();
         //设置监听
         recommend_tab.setOnClickListener(onTabClickListener);
         search_tab.setOnClickListener(onTabClickListener);

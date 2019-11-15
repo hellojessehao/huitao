@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-
+//TODO:onError回调增加错误码信息
 /**
  * @Description: 接口请求工具类
  * @author: zhangshihao

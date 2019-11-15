@@ -12,8 +12,7 @@
         android:layout_marginTop="@dimen/dp_15"
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_10"
-        android:layout_centerInParent="true"
-        >
+        android:layout_centerInParent="true">
 
         <TextView
             android:id="@+id/btn_search"
@@ -54,5 +53,34 @@
             />
     </RelativeLayout>
 
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        >
+
+        <Switch
+            android:id="@+id/switch_set_homepage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="将当前页面设置为主页"
+            android:layoutDirection="rtl"
+            android:textColor="@color/white"
+            android:padding="@dimen/dp_5"
+            />
+        <Switch
+            android:id="@+id/switch_search_clipboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进入应用搜索复制内容(仿淘宝)"
+            android:layoutDirection="rtl"
+            android:padding="@dimen/dp_5"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

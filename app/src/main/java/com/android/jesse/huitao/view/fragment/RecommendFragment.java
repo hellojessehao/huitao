@@ -118,8 +118,6 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
-        //检查版本更新
-        UpgradeUtils.checkUpgrade(mContext);
 //        iv_logo.setType(0);
 //        GlideUtil.getInstance().loadOriImg(mContext,SharedPreferencesUtil.getStringDate(Constant.AVATAR_URL),iv_logo);
         iv_logo.setType(1);

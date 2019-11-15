@@ -1,9 +1,15 @@
 package com.android.jesse.huitao.utils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Build;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.model.bean.AllConvertTklBean;
 import com.android.jesse.huitao.model.bean.GoodsListBean;
 import com.android.jesse.huitao.net.bean.NetRetBean;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -430,6 +436,64 @@ public class Utils {
      */
     public static String getBackMoneyValueString(String startFee,int couponAmount,String commissionRate){
         return saveOnePositionAfterDot(Utils.getDiscountPrice(startFee,couponAmount)*Float.parseFloat(commissionRate)*Constant.BACK_MONEY_RATE*0.01f);
+    }
+
+    /**
+     * 查询剪切板内容
+     */
+    public static void searchClipboardContent(final Context context){
+        final ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if(clipboardManager == null){
+            return;
+        }
+        ClipData data = clipboardManager.getPrimaryClip();
+        if(data == null){
+            LogUtil.e(TAG+" 未发现剪切板内容");
+            return;
+        }
+        ClipData.Item item = data.getItemAt(0);//获取最上面的内容
+        if(item == null){
+            return;
+        }
+        String tkl = item.getText().toString();
+        LogUtil.i(TAG+" clipBoard content is : "+tkl);
+        RequestHelper.OnRequestListener<AllConvertTklBean> onRequestListener = new RequestHelper.OnRequestListener<AllConvertTklBean>() {
+            @Override
+            public void onError(String msg) {
+                LogUtil.e(TAG+" msg = "+msg);
+                try{
+                    Looper.loop();
+                    ToastUtil.shortShow("啊噢~没有找到优惠券~");
+                    Looper.loop();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ToastUtil.shortShow("啊噢~没有找到优惠券~");
+                }
+            }
+
+            @Override
+            public void onSuccess(AllConvertTklBean resultBean) {
+                if(resultBean.getCode() != 200){
+                    ToastUtil.shortShow(resultBean.getMsg());
+                    return;
+                }
+                DialogUtil.showTklDisplayDialog(context,resultBean);
+                //清空剪切板
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                    clipboardManager.clearPrimaryClip();
+                }else{
+                    clipboardManager.setPrimaryClip(clipboardManager.getPrimaryClip());
+                    clipboardManager.setText(null);
+                }
+            }
+        };
+        RequestHelper requestHelper = new RequestHelper();
+        Map<String,String> params = new HashMap<>();
+        params.put("apikey",Constant.APIKEY_DINGDX);
+        params.put("content",tkl);
+        params.put("tpwd","true");
+        params.put("itemInfo","true");
+        requestHelper.request(Constant.BASE_URL_DINGDX,Constant.ALL_TKL_CONVERT_HIGH_MONEY_API,params,onRequestListener,AllConvertTklBean.class);
     }
 
 }

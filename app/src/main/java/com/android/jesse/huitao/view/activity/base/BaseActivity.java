@@ -1,10 +1,20 @@
 package com.android.jesse.huitao.view.activity.base;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 
+import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.utils.LogUtil;
 import com.android.jesse.huitao.utils.ScreenManager;
+import com.android.jesse.huitao.utils.SharedPreferencesUtil;
+import com.android.jesse.huitao.utils.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -40,6 +50,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         JPushInterface.onResume(this);
+        if(SharedPreferencesUtil.getBooleanDate(Constant.KEY_IS_SEARCH_CLIPBOARD)){
+            LogUtil.i(TAG+" searching clipBoard content");
+            Utils.searchClipboardContent(mContext);
+        }
     }
 
     @Override
