@@ -75,6 +75,10 @@
         <activity android:name=".view.activity.PicsBrowseActivity"
             android:screenOrientation="portrait"
             />
+        <activity
+            android:name="com.tencent.bugly.beta.ui.BetaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:theme="@android:style/Theme.Translucent" />
 
         <!-- pgyer -->
         <!-- 用户反馈页面 -->
@@ -83,6 +87,9 @@
         <activity android:name=".view.activity.InterviewActivity" />
         <activity android:name=".view.activity.ChatGroupActivity" />
         <activity android:name=".view.activity.ActivitiesActivity" />
+        <activity android:name=".view.activity.UpgradeActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            />
 
         <provider
             android:name="com.pgyersdk.PgyerProvider"

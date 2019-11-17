@@ -3,6 +3,8 @@ package com.android.jesse.huitao.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebViewClient;
@@ -58,7 +60,15 @@ public class BaichuanUtils {
                 //@}
                 SharedPreferencesUtil.setBooleanDate(Constant.IS_LOGIN,true);
                 context.startActivity(new Intent(context,HomePageActivity.class));
-                ((Activity)context).finish();//关闭登录页
+                new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        if(msg.what == 0){
+                            ((Activity)context).finish();//关闭登录页
+                        }
+                    }
+                }.sendEmptyMessageDelayed(0,2000);
             }
 
             @Override

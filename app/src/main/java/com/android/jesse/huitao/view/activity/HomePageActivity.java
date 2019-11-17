@@ -33,6 +33,11 @@ import com.android.jesse.huitao.view.custom.TabItemView;
 import com.android.jesse.huitao.view.fragment.AboutUsFragment;
 import com.android.jesse.huitao.view.fragment.RecommendFragment;
 import com.android.jesse.huitao.view.fragment.SearchCouponsFragment;
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.beta.Beta;
+import com.tencent.bugly.beta.UpgradeInfo;
+import com.tencent.bugly.beta.ui.UILifecycleListener;
+import com.tencent.bugly.beta.upgrade.UpgradeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,25 +123,25 @@ public class HomePageActivity extends BaseActivity {
     @TargetApi(23)
     @Override
     protected void initEventAndData() {
-        //检查版本更新
-        UpgradeUtils.checkUpgrade(mContext);
-
-        if(!SharedPreferencesUtil.getBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE)){
-            guideDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "新手指南", "找到想要购买的商品，点击“领券”后跳转淘宝，即可使用优惠券买下它了~", "知道了", "待会儿问客服", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SharedPreferencesUtil.setBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE,true);
-                    switch (v.getId()){
-                        case R.id.tv_positive:
-                            guideDialog.dismiss();
-                            break;
-                        case R.id.tv_negative:
-                            guideDialog.dismiss();
-                            break;
-                    }
+        //tencent bugly
+//        CrashReport.initCrashReport(getApplicationContext(), Constant.APPID_BUGLY, true);
+        Beta.autoDownloadOnWifi = true;//wifi下自动下载
+        Beta.upgradeListener = new UpgradeListener() {
+            @Override
+            public void onUpgrade(int ret,UpgradeInfo strategy, boolean isManual, boolean isSilence) {
+                if (strategy != null) {
+                    LogUtil.i(TAG+" find new version");
+                    Intent i = new Intent();
+                    i.setClass(getApplicationContext(), UpgradeActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                } else {
+                    LogUtil.i(TAG+" no new version to upgrade");
                 }
-            });
-        }
+            }
+        };
+        Bugly.init(getApplicationContext(), Constant.APPID_BUGLY, true);
+
         if (getIntent() != null && getIntent().getBooleanExtra(Constant.FROM_NOTIFICATION, false)) {
             gotoTaobaoDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "提示", "淘口令复制成功，是否现在进入淘宝？", "现在就去", "稍等",
                     new View.OnClickListener() {
@@ -272,6 +277,23 @@ public class HomePageActivity extends BaseActivity {
             for (int i = 0; i < permissions.length; i++) {
                 if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(permissions, REQUEST_PERMISSIONS);
+                }else{
+                    if(!SharedPreferencesUtil.getBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE)){
+                        guideDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "新手指南", "找到想要购买的商品，点击“领券”后跳转淘宝，即可使用优惠券买下它了~", "知道了", "待会儿问客服", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SharedPreferencesUtil.setBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE,true);
+                                switch (v.getId()){
+                                    case R.id.tv_positive:
+                                        guideDialog.dismiss();
+                                        break;
+                                    case R.id.tv_negative:
+                                        guideDialog.dismiss();
+                                        break;
+                                }
+                            }
+                        });
+                    }
                 }
             }
         }

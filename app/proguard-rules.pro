@@ -23,6 +23,11 @@
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 -keep class sun.misc.Unsafe { *; }
 
+#tencent bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+-keep class android.support.**{*;}
+
 #阿里百川SDK 4.0.0
 -keepattributes Signature
 -ignorewarnings

@@ -19,6 +19,16 @@
             android:layout_height="210dp"
             android:background="@color/color_selected_tags">
 
+            <TextView
+                android:id="@+id/tv_version_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="v1.0.0"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/dp_20"
+                />
+
             <LinearLayout
                 android:id="@+id/ll_already_login"
                 android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.android.jesse.huitao.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
 import com.android.jesse.huitao.model.bean.FailBean;
 import com.android.jesse.huitao.model.bean.GoodsListBean;
+import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.GlideUtil;
 import com.android.jesse.huitao.utils.HttpUtils;
 import com.android.jesse.huitao.utils.LogUtil;
@@ -46,6 +48,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -87,6 +90,7 @@ public class RecommendFragment extends BaseFragment {
     private CommonFragmentAdapter adapter;
     private GoodsListBean bannerBean;
     List<GoodsListBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> bannerDataBeanList;
+    private Dialog guideDialog;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
@@ -272,11 +276,27 @@ public class RecommendFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.view_search})
+    @OnClick({R.id.view_search,R.id.iv_logo})
     public void onClick(View v){
         switch (v.getId()){
             case R.id.view_search:
                 ActivityUtils.startActivity(SearchActivity.class);
+                break;
+            case R.id.iv_logo:
+                guideDialog = DialogUtil.showHintDialogForCommonVersion(mContext, "新手指南", "找到想要购买的商品，点击“领券”后跳转淘宝，即可使用优惠券买下它了~", "知道了", "待会儿问客服", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SharedPreferencesUtil.setBooleanDate(Constant.SPKEY_NOT_FIRST_INTO_HOMEPAGE,true);
+                        switch (v.getId()){
+                            case R.id.tv_positive:
+                                guideDialog.dismiss();
+                                break;
+                            case R.id.tv_negative:
+                                guideDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
                 break;
         }
     }

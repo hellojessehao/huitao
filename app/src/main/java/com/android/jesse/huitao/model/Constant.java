@@ -41,6 +41,7 @@ public class Constant {
     public static final String PID_TAOBAO = "mm_480300196_767750207_109339400190";//推广位ID（必须是授权淘宝号下的推广位）
     public static final String APKEY_MIAOYQ = "15025093-8d67-e26d-353b-0c9e2e7329b1";//喵有券平台APKEY
     public static final String APIKEY_DINGDX = "GIzds8rtUV3gJJiHsSKgXAg5j7DKCF5t";//订单侠APIkey
+    public static final String APPID_BUGLY = "acdfdd0500";
     //@}
 
     //淘客相关参数@{

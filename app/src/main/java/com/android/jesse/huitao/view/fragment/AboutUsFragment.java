@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.android.jesse.huitao.R;
 import com.android.jesse.huitao.model.Constant;
+import com.android.jesse.huitao.net.util.DeviceUtil;
+import com.android.jesse.huitao.utils.ApkInfoUtils;
 import com.android.jesse.huitao.utils.BaichuanUtils;
 import com.android.jesse.huitao.utils.DialogUtil;
 import com.android.jesse.huitao.utils.GlideUtil;
@@ -32,6 +34,7 @@ import com.android.jesse.huitao.view.activity.LoginActivity;
 import com.android.jesse.huitao.view.activity.base.BaseFragment;
 import com.android.jesse.huitao.view.custom.ImageViewRoundRect;
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.DeviceUtils;
 import com.pgyersdk.feedback.PgyerFeedbackManager;
 
 import butterknife.BindView;
@@ -52,6 +55,8 @@ public class AboutUsFragment extends BaseFragment {
     TextView tv_name;
     @BindView(R.id.tv_activities)
     TextView tv_activities;
+    @BindView(R.id.tv_version_name)
+    TextView tv_version_name;
 
     private Dialog mLogoutDialog;
 
@@ -62,6 +67,7 @@ public class AboutUsFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
+        tv_version_name.setText("v"+ApkInfoUtils.getVersionName(mContext));
         GlideUtil.getInstance().loadOriImg(mContext,SharedPreferencesUtil.getStringDate(Constant.AVATAR_URL),iv_trait);
         tv_name.setText(SharedPreferencesUtil.getStringDate(Constant.NICKNAME));
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.RED);
