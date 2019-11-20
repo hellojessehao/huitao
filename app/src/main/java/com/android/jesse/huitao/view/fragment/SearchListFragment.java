@@ -73,7 +73,7 @@ public class SearchListFragment extends BaseFragment {
         requestHelper = new RequestHelper<>();
         bussinessMap = new HashMap<>();
         adapter = new SearchListRecyclerAdapter(mContext,dataBeanList);
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext,1));
         OffsetRecyclerDivider divider = new OffsetRecyclerDivider();
         divider.setBottom(SizeUtils.dp2px(5));
         divider.setLeft(SizeUtils.dp2px(5));

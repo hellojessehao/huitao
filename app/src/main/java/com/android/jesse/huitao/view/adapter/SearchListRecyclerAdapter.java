@@ -62,7 +62,7 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.search_list_grid_adapter,null,false));
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.search_list_grid_adapter_oneline,null,false));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
         viewHolder.tv_back_rate.setText("("+Utils.saveOnePositionAfterDot(Float.parseFloat(dataBean.getCommission_rate())*0.01f*Constant.BACK_MONEY_RATE)+"%)");
         LogUtil.d(TAG+" couponStartFee = "+dataBean.getCoupon_start_fee()+",couponAmount = "+dataBean.getCoupon_amount()+",CommissionRate = "+dataBean.getCommission_rate());
 
-        viewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ll_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,GoodsDetailActivity.class);
@@ -172,8 +172,8 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
         TextView tv_coupon_value;
         @BindView(R.id.ll_get_coupon)
         LinearLayout ll_get_coupon;
-        @BindView(R.id.rl_container)
-        RelativeLayout rl_container;
+        @BindView(R.id.ll_container)
+        LinearLayout ll_container;
         @BindView(R.id.tv_back_money)
         TextView tv_back_money;
         @BindView(R.id.tv_back_rate)
@@ -181,7 +181,7 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,SizeUtils.dp2px(300));
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,SizeUtils.dp2px(160));
             itemView.setLayoutParams(layoutParams);
         }
     }

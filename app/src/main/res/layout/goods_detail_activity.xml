@@ -232,7 +232,7 @@
                     android:layout_toEndOf="@id/tv_valide_date_end"
                     android:background="@drawable/bg_red_radiusend_4"
                     android:gravity="center"
-                    android:text="立即领券"
+                    android:text="领券购买"
                     android:textColor="@color/white" />
 
             </RelativeLayout>

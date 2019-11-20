@@ -174,7 +174,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="券"
+            android:text="领券购买"
             android:paddingStart="@dimen/dp_2"
             android:paddingEnd="@dimen/dp_2"
             android:paddingTop="@dimen/dp_3"

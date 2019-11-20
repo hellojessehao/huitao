@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 28
@@ -29,14 +30,14 @@ android {
         debug {
             keyAlias 'jesseandroid'
             keyPassword 'jesse0225.'
-            storeFile file('D:/Development/keystore/keystore/huitao.jks')
+            storeFile file('D:/zhangshihao/development/keystore/huitao.jks')
             storePassword 'jesse0225.'
         }
 
         release {
             keyAlias 'jesseandroid'
             keyPassword 'jesse0225.'
-            storeFile file('D:/Development/keystore/keystore/huitao.jks')
+            storeFile file('D:/zhangshihao/development/keystore/huitao.jks')
             storePassword 'jesse0225.'
         }
     }

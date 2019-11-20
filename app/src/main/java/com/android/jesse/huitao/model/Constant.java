@@ -6,7 +6,6 @@ package com.android.jesse.huitao.model;
  * @date: 2019/8/19
  */
 public class Constant {
-    public static final String ABC = "abc";
 
     //@接口地址{
     public static final String BASE_URL_TAOBAO = "http://gw.api.taobao.com/router/rest?";
