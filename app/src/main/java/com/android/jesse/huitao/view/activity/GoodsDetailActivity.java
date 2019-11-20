@@ -134,12 +134,14 @@ public class GoodsDetailActivity extends BaseActivity {
                     itemId = mapDataBean.getItem_id();
 
                     List<String> imageUrlList = new ArrayList<>();
-                    for (int i = 0; i < mapDataBean.getSmall_images().getString().size(); i++) {
-                        imageUrlList.add(Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
-                        LogUtil.i(TAG + " url : " + Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
+                    if(mapDataBean.getSmall_images() != null){
+                        for (int i = 0; i < mapDataBean.getSmall_images().getString().size(); i++) {
+                            imageUrlList.add(Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
+                            LogUtil.i(TAG + " url : " + Constant.URL_HEADER + mapDataBean.getSmall_images().getString().get(i));
+                        }
+                        mBanner.setImages(imageUrlList);
+                        mBanner.start();
                     }
-                    mBanner.setImages(imageUrlList);
-                    mBanner.start();
 
                     tv_back_money.setText(Utils.getBackMoneyString(mapDataBean.getCoupon_start_fee(),mapDataBean.getCoupon_amount(),mapDataBean.getCommission_rate()));
                     tv_back_rate.setText("("+Utils.saveOnePositionAfterDot(Float.parseFloat(mapDataBean.getCommission_rate())*Constant.BACK_MONEY_RATE)+"%)");
